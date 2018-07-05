@@ -1,0 +1,17 @@
+6
+1 PDX Portland OR USA
+2 DEN Denver CO USA
+3 JFK NewYork NY USA
+4 MFR Medford OR USA
+5 LHR London NA UK
+6 FRA Frankfurt NA Germany
+9
+1 2 3
+2 3 5
+3 1 4
+4 5 6
+5 4 2
+6 1 2
+7 2 4
+8 4 1
+9 2 1

@@ -1,0 +1,56 @@
+Pseudo Code:
+
+New():
+	Print "New Batch Initialized"
+
+Add():
+	PID = currentTimeMill % 100000
+	proc
+	proc.priority = normal
+	proc.pid = PID
+	Enqueue(proc)
+	return "Proc added to batch"
+
+Cat():
+	string
+	file = args[0]
+	while file.nextLine != null:
+	string = string + file.nextLine
+	return string
+
+Logout():
+	exit()
+
+Primes(pw, n):
+	if n < 1:
+		return ERROR
+	else:
+		count = 0
+		curr = 2
+		while count!= n:
+			while i < curr:
+				if curr % i == 0:
+					prime = FALSE
+					break
+				if prime == TRUE:
+					count = count + 1
+					print curr
+				curr = curr + 1
+
+Priority():
+	newPrior = args[1]
+	if newPrior in range(Priority_min, Priority_max):
+		lis.setPriority(arg[0],newPrior)
+
+commandReceived(command):
+	argData = command.toArray
+	argData = parse(argData[0])
+	instance = createClassInstance(argData[0])
+	args = argData[1:argData.length]
+	instance.EXECUTE(args,lis)
+
+Queue():
+	return STRING(lis)
+
+Remove():
+	list.remove(Process)

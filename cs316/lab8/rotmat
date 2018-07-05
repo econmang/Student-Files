@@ -1,0 +1,19 @@
+GLfloat cx = cos(thetaRads->x);
+GLfloat sx = sin(thetaRads->x);
+GLfloat cy = cos(thetaRads->y);
+GLfloat sy = sin(thetaRads->y);
+GLfloat cz = cos(thetaRads->z);
+GLfloat sz = sin(thetaRads->z);
+
+GLfloat cxsy = cx * sy;
+GLfloat sxsy = sx * sy;
+
+m[0] = cy * cz;
+m[4] = -cy * sz;
+m[8] = sy;
+m[1] = sxsy * cz + cx * sz;
+m[5] = -sxsy * sz + cx * cz;
+m[9] = -sx * cy;
+m[2] = -cxsy * cz + sx * sz;
+m[6] = cxsy * sz + sx * cz;
+m[10] = cx * cy;

@@ -1,0 +1,125 @@
+/*
+	Evan Conley
+	CS 210
+	Final Project CSS Style Rules
+*/
+
+body {
+	background-image: url("IFbackground.jpg");
+	border: 5px solid white;
+}
+
+section {
+	width: 1300px;
+	height: 1000px;
+	margin: 0 auto 0 auto;
+	padding: 5px;
+	border-left: 5px solid white;
+	border-right: 5px solid white;
+}
+
+hgroup {
+	width: 100%;
+}
+
+hgroup h1 {
+	float: left;
+	padding: 5px;
+	border: 4px white solid;
+	font-family: Verdana;
+	font-size: 25px;
+	box-shadow: inset 10px 10px 5px #888888;
+	border-radius: 10px;
+}
+
+hgroup h1 span {
+	font-family: Courier, "Courier New";
+	font-size: 45px;
+}
+
+nav li {
+	display: inline-block;
+	margin-right: 12px;
+	float: right;
+	padding: 5px;
+	border: 5px white solid;
+	border-radius: 5px;
+	box-shadow: 10px 10px 5px #888888;
+}
+
+nav li a {
+	text-decoration: none;
+	color: black;
+}
+
+nav li:hover{
+	background-color: white;
+}
+
+div img {
+	margin-top: 250px;
+	margin-left: 500px;
+	float: right;
+	height: 300px;
+	width: 300px;
+	border: 5px solid black;
+}
+
+.cursive {
+	margin-top: 20px;
+	margin-left: 120px;
+	margin-right: 275px;
+	float: right;
+	font-family: "Apple Chancery",cursive;
+	font-size: 55px;
+	background-color: skyblue;
+	border: 10px solid white;
+	padding: 5px;
+	text-decoration: none;
+	color: black;
+	border-radius: 10px;
+}
+
+.cursive:hover {
+	background-color: white;
+	box-shadow: inset 10px 10px 5px #888888;
+}
+
+h2 {
+	font-family: sans-serif;
+	padding: 10px;
+}
+
+article {
+	width: 800px;
+	height: 900px;
+	font-family: Verdana;
+	font-size: 24px;
+	padding: 5px;
+	background-color: skyblue;
+	margin: 0 auto 0 auto;
+	border: 5px solid white;
+}
+
+figure img {
+	width: 450px;
+	height: 400px;
+}
+
+figcaption {
+	font-family: "Times New Roman";
+	font-size: 12px;
+}
+
+table tr th {
+	padding: 10px;
+}
+
+table img {
+	width: 200px;
+	height: 250px;
+}
+
+.Fall {
+	color: orange;
+}

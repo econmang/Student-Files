@@ -1,0 +1,22 @@
+Evan Conley
+Prof. Nordquist
+CS 459
+5/19/2017
+
+Lab 2 Synthesis Questions
+
+1.	Explain how to properly terminate threads.
+
+		The process described in the book, and the one suggested by Oracle (as the thread.stop() method is deprecated), is to utilize deferred termination via a flag. By calling interrupt() on a thread, the flag is set and, then, a check with isInterrupted(), will respond to the flag, thowing the InterruptedException. Handling this will cause the thread to terminate.
+
+2.	What threads do we use in this implementation? What is the purpose of each one?
+
+		We use a BatchThread to keep track of the running thread, a MaxTime thread that goes along with any BatchThread and interrupts it if it goes over runtime, and a Kernel Thread that interrupts all user input and handles it at kernel level.
+
+3.	Why can we overwrite the variable holding the active ProcessList object when some thread is still running this process list?
+
+		Because the program has created a separte BatchThread for the running object, so we can manipulate the processList while the other processes are executing.
+
+4.	What changes would be necessary to display the status of all running or waiting processes?
+
+		We would need to implement a status change in the BatchThread at the beginning of runtime, changing some to waiting unless they were the active process or idle. As it stands, we just have that the BatchThread object changes the stati of all processes in the thread to running and then to terminated at the end of the processing, before removing them from the queue.

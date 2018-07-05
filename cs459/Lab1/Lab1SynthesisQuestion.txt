@@ -1,0 +1,48 @@
+Evan Conley
+Professor Nordquist
+CS 459
+4/30/2017
+
+Lab 1
+
+1.  The java class loader will cause a software failure when the name of a class to run is spelled with a different case. For example, suppose you want to dynamically load and run a class saved as Tower.class. If you spell it as tower.class, the batch sequencer will bomb. What did you do to avoid this error?
+
+	For commands, we used a case changing statement to make sure all commands were in the correct case. For the programs like Tower, we throw an exception that tells the user of the case error, so they can re-type the program name.
+
+2.  Most operating systems use doubly linked lists instead of singly linked lists. Why do you suppose that this is the case?
+
+	A singly linked list assumes you start at the head of a control block. Additionally, it means you cannot head back up the control block as you head down it. Doubly linked lists are more dynamic and allow for switches of processes and the ability to efficiently move through the control block.
+
+3.  Define a primary characteristic of each of the following categories of operating systems.
+	a.  Batch:
+		Small resident kernel sequences jobs using a job control interface.
+	b.  Time Share:
+		System that schedules real time clock "slices" between multiple users.
+	c.  Real Time:
+		Special purpose embedded systems with no user interface.
+	d.  Distributed:
+		A number of systems that are linked via a network. There are individual components saved at the network level, but failure states are local (like for MMO games or peer-to-peer applications).
+	e.  Handheld:
+		Friendly user interfaces with limited processing power and speed.
+	f.  Embedded:
+		Similar to real-time system, where this is a specialized system that is embedded in a larger system with a given function and little to no user interface.
+
+4.  What is the difference between a Java Exception and a Java Error?
+
+	Jave Exceptions are logic error that have the capacity to be handled at runtime whereas Java Errors are a subclass of Throwable that indicate a serious failure in the program that should not be handled at runtime.
+
+5.  Which activities related to process management did we implement in this lab?
+
+	We utilized interrupts, priority, and scheduling.
+
+6.  Why are command interpreters separate from the kernel? How could we have implemented our “batch system” with the command interpreter separate?
+
+	Command interpreters are separate from the kernel because command interpreters take inputted commands and parse them in order to find the correct way they should be handled. This part of the system changes dependent on size and capability of the system, so we should not keep it with kernel (something that should remain constant). To implement this OS with the command interpreter separate, we could have created a class for the command interpreter that had a function (say: HandleInput()) and then created an instance of the command interpreter in the kernel with the command. This way, input would be taken in by the kernel, but the rest of the handling of the input would be done separate from the kernel.
+
+7.  In our “batch system”, what part of it would be considered the kernel?
+
+	Cli.java would be our kernel.
+
+8.  How did we use polymorphism in this project?
+
+	All commands extended the abstract class we created, Commands.java, and the Cli implemented the CommandListener interface.

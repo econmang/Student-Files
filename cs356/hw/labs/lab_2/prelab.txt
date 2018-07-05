@@ -1,0 +1,53 @@
+Evan Conley
+Prof. Vanderburg
+CS 356
+4/13/2018
+
+1. Think about how you would use multiple types of data structures. How would you create a dictionary that holds a list?
+
+	I believe I'd intialize the list variables first and then use the build structure of the dictionary to make the list variables the value in the key:value pairs.
+	Ex.) l_one = [1,2,3]
+		 l_two = [0,1]
+
+		 diction_list = {'key_one': l_one, 'key_two': l_two}
+
+2. Describe your plan (i.e. what data you need to store, how you plan to store each part of the required data). Draw an example with information for three contacts in your phone.
+	
+	I plan on creating a "contacts" dictionary variable. Then, each key will be a String of the form "first last" and the values associated will be lists. Each list will have 3
+	items in them, of the form [phone, email, age]. By taking in Strings for first and last name, you could create a key and then assign/update the information associated with the key via the list.
+
+	contacts = {}
+	contacts["Dave Terry"] = ["(541)867-5309","davemail@gmail.com","24"]
+	contacts["Karen Herry"] = ["(541)867-5310","karenmail@gmail.com","19"]
+	contacts["Mikey Merry"] = ["(541)867-5311","mikeymail@gmail.com","22"]
+
+	Then, 
+	contacts = {"Dave Terry": ["867-5309","davemail@gmail.com","24"], "Karen Herry" = ["867-5310","karenmail@gmail.com","19"], "Mikey Merry"] = ["867-5311","mikeymail@gmail.com","22"]}
+	
+
+3. Look up the "in" operator in Python and write a couple of sentences about hwo you think you would use it in this lab.
+
+	The "in" operator seems to be a function that returns a boolean value expressing whether or not an item exists in a container. I could quickly check if a contact already exists. If it does, then I will update the information, if not, I will create contact.
+
+	Ex.) if "Dave Terry" in contacts:
+			contacts["Dave Terry"][1] = "newemail.gmail.com"
+
+4. Look at the function descriptions below and write signatures for each of them. You will implement the function signature in your lab.
+	
+	create_contact(contacts, first, last, email, age, phone) 
+	
+	update_contact_number(contacts, first, last, phone) 
+
+	update_contact_email(contacts, first, last, email) 
+
+	update_contact_age(contacts, first, last, age)
+
+	get_contact_email(contacts, first, last) 
+	 
+	get_contact_age(contacts, first, last)
+
+	get_contact_number(contacts, first, last) 
+ 
+	contains_contact(contacts, first, last) 
+ 
+	display(contacts, first, last) 

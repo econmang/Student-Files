@@ -1,0 +1,93 @@
+body {
+	background-color: gray;
+	color: white;
+	font-family: "Palatino Linotype";
+}
+
+section {
+	margin: 0px auto 0px auto;
+	background-color: #2980B9;
+	border: 2px solid black;
+	color: white;
+	width: 400px;
+	padding: 5px;
+}
+
+section img {
+	display: block;
+	margin: 0 auto;
+	border: 3px solid black;
+}
+
+header {
+	text-align: center;
+	font-size: 25px;
+	margin: 50px;
+}
+
+nav {
+	margin-right: auto;
+	margin-left: auto;
+}
+
+nav li a {
+	color: white;
+	text-decoration: none;
+}
+
+.assignList li a {
+	display: block;
+	margin: 5px auto 5px auto;
+}
+
+.assignList li a:hover {
+	color: black;
+}
+
+.horiz li {
+	display: block;
+    float: left;
+    position: relative;
+    left: 20%;
+	margin: 5px 5px 15px 5px;*/
+}
+
+.horiz li a {
+	display: inline-block;
+}
+
+.horiz li a:hover {
+	color: black;
+}
+
+.horiz li:not(:first-child):before {
+    content: " | ";
+}
+
+#moon {
+	 -webkit-transform: rotate(90deg) translate(-110px, 110px);
+}
+
+#moon, #stark, #sand {
+	border-radius: 10px;
+	border: 3px solid black;
+	box-shadow: rgba(0,0,0,0.5) -15px 10px 15px;
+}
+
+.moreSpace {
+	margin-bottom: 10px;
+}
+
+table {
+	background: linear-gradient(to right, #2980B9,gray)
+}
+
+table tr a {
+	text-decoration: none;
+	color: white;
+}
+
+table tr a:hover {
+	text-decoration: none;
+	color: black;
+}

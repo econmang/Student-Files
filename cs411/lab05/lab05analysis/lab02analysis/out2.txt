@@ -1,0 +1,69 @@
+With a max ID of 250 and 0 items, it took 0.000000 milliseconds to insert and sort.
+With a max ID of 250 and 250000 items, it took 20.000000 milliseconds to insert and sort.
+With a max ID of 250 and 500000 items, it took 120.000000 milliseconds to insert and sort.
+With a max ID of 250 and 750000 items, it took 220.000000 milliseconds to insert and sort.
+With a max ID of 250 and 1000000 items, it took 340.000000 milliseconds to insert and sort.
+With a max ID of 250 and 1250000 items, it took 440.000000 milliseconds to insert and sort.
+With a max ID of 250 and 1500000 items, it took 540.000000 milliseconds to insert and sort.
+With a max ID of 250 and 1750000 items, it took 650.000000 milliseconds to insert and sort.
+With a max ID of 250 and 2000000 items, it took 760.000000 milliseconds to insert and sort.
+With a max ID of 250 and 2250000 items, it took 830.000000 milliseconds to insert and sort.
+With a max ID of 250 and 2500000 items, it took 940.000000 milliseconds to insert and sort.
+With a max ID of 250 and 2750000 items, it took 1080.000000 milliseconds to insert and sort.
+With a max ID of 250 and 3000000 items, it took 1240.000000 milliseconds to insert and sort.
+With a max ID of 250 and 3250000 items, it took 1330.000000 milliseconds to insert and sort.
+With a max ID of 250 and 3500000 items, it took 1420.000000 milliseconds to insert and sort.
+With a max ID of 250 and 3750000 items, it took 1490.000000 milliseconds to insert and sort.
+With a max ID of 250 and 4000000 items, it took 1610.000000 milliseconds to insert and sort.
+With a max ID of 250 and 4250000 items, it took 1730.000000 milliseconds to insert and sort.
+With a max ID of 250 and 4500000 items, it took 1860.000000 milliseconds to insert and sort.
+With a max ID of 250 and 4750000 items, it took 1990.000000 milliseconds to insert and sort.
+With a max ID of 250 and 5000000 items, it took 2070.000000 milliseconds to insert and sort.
+
+
+With a max ID of 500 and 0 items, it took 0.000000 milliseconds to insert and sort.
+With a max ID of 500 and 250000 items, it took 20.000000 milliseconds to insert and sort.
+With a max ID of 500 and 500000 items, it took 100.000000 milliseconds to insert and sort.
+With a max ID of 500 and 750000 items, it took 240.000000 milliseconds to insert and sort.
+With a max ID of 500 and 1000000 items, it took 370.000000 milliseconds to insert and sort.
+With a max ID of 500 and 1250000 items, it took 400.000000 milliseconds to insert and sort.
+With a max ID of 500 and 1500000 items, it took 550.000000 milliseconds to insert and sort.
+With a max ID of 500 and 1750000 items, it took 630.000000 milliseconds to insert and sort.
+With a max ID of 500 and 2000000 items, it took 740.000000 milliseconds to insert and sort.
+With a max ID of 500 and 2250000 items, it took 860.000000 milliseconds to insert and sort.
+With a max ID of 500 and 2500000 items, it took 960.000000 milliseconds to insert and sort.
+With a max ID of 500 and 2750000 items, it took 1070.000000 milliseconds to insert and sort.
+With a max ID of 500 and 3000000 items, it took 1210.000000 milliseconds to insert and sort.
+With a max ID of 500 and 3250000 items, it took 1350.000000 milliseconds to insert and sort.
+With a max ID of 500 and 3500000 items, it took 1440.000000 milliseconds to insert and sort.
+With a max ID of 500 and 3750000 items, it took 1530.000000 milliseconds to insert and sort.
+With a max ID of 500 and 4000000 items, it took 1670.000000 milliseconds to insert and sort.
+With a max ID of 500 and 4250000 items, it took 1790.000000 milliseconds to insert and sort.
+With a max ID of 500 and 4500000 items, it took 1890.000000 milliseconds to insert and sort.
+With a max ID of 500 and 4750000 items, it took 2000.000000 milliseconds to insert and sort.
+With a max ID of 500 and 5000000 items, it took 2110.000000 milliseconds to insert and sort.
+
+
+With a max ID of 1000 and 0 items, it took 0.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 250000 items, it took 10.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 500000 items, it took 110.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 750000 items, it took 230.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 1000000 items, it took 340.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 1250000 items, it took 440.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 1500000 items, it took 530.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 1750000 items, it took 630.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 2000000 items, it took 760.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 2250000 items, it took 890.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 2500000 items, it took 990.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 2750000 items, it took 1100.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 3000000 items, it took 1220.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 3250000 items, it took 1340.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 3500000 items, it took 1470.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 3750000 items, it took 1640.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 4000000 items, it took 1710.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 4250000 items, it took 1790.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 4500000 items, it took 1920.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 4750000 items, it took 2040.000000 milliseconds to insert and sort.
+With a max ID of 1000 and 5000000 items, it took 2170.000000 milliseconds to insert and sort.
+
+

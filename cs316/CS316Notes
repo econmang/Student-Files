@@ -1,0 +1,1312 @@
+CS 316 Computer Graphics I (and II)
+Prof. Kevin Sahr
+
+Abbreviate Computer Graphics as [CG]
+
+Goals:
+	- Basic understanding of theoretical foundations of CG
+		* Underlying mathematics (Linear Algebra)
+		* Classic CG algorithms
+	- CG Programming in C/OpenGL
+		* C Practice
+
+CG: The creation of images from a computer based model of real or imaginary objects
+
+	Ex.)  Real/Imaginary World Object  -----> Computer Model of Object --------------------> Image of Model
+																			(Domain of CG)
+																		"The Graphics Pipeline"
+
+Rendering: The process of turning model into image
+
+in CS, 2 CG disciplines:
+	1.) Image Processing: Manipulating Images
+	2.) Computer Graphics: Covers the process of rendering (the Pipeline)
+
+2 Basic Types of CG Programs:
+	- Interactive: Image is updated in real-time in response to changes. Real-Time limits quality of image
+	- Offline Rendering: Rendering can take arbitrary amount of time. Result can be "photo realistic"
+
+CG app. domains:
+	1. Simulations (i.e. med simulation, training environment, conceptual simulation)
+	2. Entertainment (i.e. video games, movies, etc.)
+	3. Computer-Aided Design (CAD)
+	4. Scientific Visualization
+	5. Education and Training
+
+2 Levels of CG Software:
+	- CG Applications: Allows (non-programmer) end-users to create images from models (Ex. Maya, Blendr, RenderMan)
+	- CG Libraries: allow programmers to write CG apps
+
+CG History:
+	- 1962: SketchPad (Ivan Sutherland, MIT)
+		* Interactice Drawing Program
+		* Introduced many basic algorithms/techniques still used today
+				ex.) "window"
+	- Early 70's -> SmallTalk (the second object oriented language; created by Alan Kay)
+		* Introduced 1st Modern GUI
+		* "event-driven"/"dynamic" programming
+		* Program flow of control is determined at run-time in response to events
+	- 1980s:
+			- Intro of PC-based GUI's (SmallTalk -> XeroxStar -> Apple Mac -> MS Windows)
+			- PC CG use:
+				* hardware specific
+				* Mostly 2D
+				* 3D CG limited to high-end apps:
+					- DoD
+					- dedicated proprietary hardware
+			- Silicon Graphics, Inc. (SGI) dominated the 3D market:
+				* Proprietary workstations
+				* Graphics Library called "Iris GL"
+			- Dedicated hardware CG subsystems (now-called Graphics Cards):
+				* Collection of high-end dedicated CG processors, dedicated memory, and its own display outputs
+				* Implements much of CG Pipeline in hardware
+
+[Aside]
+(Many rendering steps involve lots of repetitive processing of similar elements)
+Ex: Multiply large of (x,y,z)'s by the same number (to scale)
+
+Allows for optimizing by:
+	1.) Pipelining: execution of an operation overlaps with execution of the next operation
+	2.) Parellelism: Multiple pipelines perform same operation on different inputs at the same time
+[End Aside/Back to History]
+
+	- 1990s:
+		* 1992: SGI releases OpenGL:
+			- Open CG Library API
+			- abstracted basic CG hardware functionality 
+				* if missing, it would be emulated in software, albeit a slower process (expanded user-base and gave more potential to other programmers)
+		* Intro of PC "graphics cards" (alongside OpenGL, made graphics available to everyone)
+		* 1995: Microsoft purchased DirectX CG Library to compete with OpenGL
+	- 2000s:
+		* Ongoing tension between portability -> requires abstraction away from any specific hardware
+			- But, ther was constant development of new features specific to hardware
+			- OpenGL implemented "fixed function" pipeline [everythign done one way]
+		* Portability vs. Hardware-specific new features:
+			non-standard OpenGL Extensions
+		* 2004: OpenGL Shading Language (GLSL)
+			- provides direct access to CG hardware
+			- "programmable pipeline"
+		* 2006:
+			- SGI transfers OpenGL to Khronos Group
+		* 2007:
+			OpenGL ES (Embedded Systems):
+				- Subset of OpenGL for mobile devices
+		* 2009:
+			OpenGL 3.2: Fixed Function Pipeline removed (Must program in GLSL)
+		* 2014:
+			Apple releases proprietary Metal CG Lib
+		* 2017:
+			- Current OpenGL version 4.6 but some 3.X is most common
+
+CS Library Choice for CS316:
+	- DirectX vs. Metal vs. OpenGL (But DX and Metal are proprietary, so OpenGL best choice)
+	OpenGL runs on everything and is implemented on all platforms
+[END History]
+
+How is comp. img represented?
+	- Mostly Raster images:	consists of matrix of discrete pixels (Picture Elements)
+	- Pixels arranged in a square grid
+	- x axis counts from 0 -> n left to right
+	- y axis count from 0 -> m top to bottom
+	- Rows in img. grid are referred to as "scan-lines"  (Note: Origin in upper left and "scan-line" term is based on Cathode-Ray Tube TV systems)
+	- Columns are referred to as "columns"
+	- Coordinates in CG are (scan-line,col) -> (y,x) [as opposed to math, which has (x,y)]
+	- Resolution of raster:
+		* #cols x #scan-lines
+			Ex.) Monitor res of 1280 x 1024  means 1280 cols x 1024 scan-lines
+	- Raster stored in "fast RAM" (aka Frame Buffer)
+	- Number of bits per pixel determines info/pixel
+		ex.) pixels commonly are 32 bits with 24 for color
+			* number of color bits determines # of colors available
+		Recall: n bits = 2^n
+
+Rendering Process Oeprates on Graphic/Output Primitives:
+	- most common representation is Vector Representation
+		* Uses points
+	Hierarchy:
+		Point 		*p
+		Lines 		*p1 -------- *p2
+		Polyline	Connected line segments (where points are vertices and lines are edges)
+		Polygon		Closed/connected polyline where first vertex is also the last vertex
+
+So, any CG Library needs:
+	- drawPoint(p)
+	- drawLine(p1,p2)
+	- drawPolyLine(p[])
+	- drawPolygon(p[])	[can be wireframe or filled versions]
+
+How represent each pt/vertex?
+	Most common: 2D (x,y)
+				 3D (x,y,z)
+
+2 Different types of coordinate systems:
+	1.) Absolute: Specify actual position		(OpenGL uses absolute coordinates)
+	2.) Relative: Each position is an offset from last position ("turtle graphics")
+							i.e. GOTO(P1)
+								 DrawTo(P2)
+								 DrawTO(P3)
+								 DrawTO(P1)
+
+OpenGL resets Screen Origin to lower left of coordinate system
+
+Model:
+	3D obj.
+	graphics Primitives 		You can transfrom (w/ lin. algebra) 3D and 2D obj to create graphical representation
+	2D obj
+	World/Model Coordinates
+
+	Transformations give us "World Window Coordinates" or "Normalized Device Coordinates"
+
+World Window Coordinates:
+	Viewing region utilizes scaling from -1 to 1 in each dimension with origin at the center
+	Axes aligned with screen coordinates:
+		x || with i
+		y || with j
+	Viewport (VP) -> Region of the screen in which the objects will be rendered w/ origin at center of screen
+
+Viewport Coordinates:
+	- axes aligned with screen
+	- 1.0 units = 1 pixel
+
+We only want to render portions of our model that lie within the VP
+Clipping: Removing portions of graphics primitives that lie outside of specified region
+
+
+|	_______
+|	|	  |			<- clipping region with xmin and xmax and ymin and ymax
+|	|_____|
+|____________
+
+Point Clipping: p(x,y) is discarded if x < xmin or x > xmax or y < ymin and y > ymax
+
+Line Clipping:
+	Efficient Algorithm: Cohen-Sutherland:
+			- Divide plane into regions and assign endpoints to regions
+
+ex.) Clipping Region: LowerLeft: (0.5, 2.0)
+					  UpperRight: (4.0, 5.6)
+
+					  line: P1(1.0, 1.5)
+					  		P2(5.0, 3.5)
+
+now have points and line clipping. Similar algorithms for polyline and polygon
+Now transform clipped primitives world window coordinates to VP coordinates (scale/translate)
+	(1.0 units = 1 pixel)
+
+- Now have vector representation clipped to VP
+- But, need "rastor representation"; the set of pixels that the primitive intersects
+
+For now, assume B & W monitor (black background/white foreground)
+
+2 low-level functions:
+	SetPixel(i,j): turn pixel white
+	getPixel(i,j): returns color of pixel
+
+2 utility functions:
+	- floor(x): return the greatest integer <= x   (takes floating point and returns int)
+	- round(x): return integer closest to x (takes floating point and returns int)
+
+Need to determine the corresponding pixels for vector primitive:
+	called rasterization OR "scan line conversion"
+
+Point Rasterization:
+	- map (x,y) to nearest pixel (i,j)
+	- drawPoint(x,y):
+		setPixel(round(x), round(y))
+		ex.) drawPoint(10.21, 8.6) -> setPixel(10,9)
+
+Line Rasterization:
+	Assume thickness of 1.0 (1 pixel in width)
+	- NOTE: m = 0 (horizontal)
+			0 < m < 1 (increasing) [define algorithms for increasing slope]
+			-1 < m < 0 (decreasing)
+
+Idea: sample line at discrete intervals and rasterize the points.
+	What Interval?
+	Lots of algorithms:
+		1.) The Digital Differential Analyzer (DDA)
+		2.) Bresenham's
+
+DDA:
+	- samples at unit intervals along either x or y direction
+		RECALL: Slope = deltay/deltax   ->  deltay = slope * deltax
+											deltax = deltay/m
+
+		sample at deltax = 1 unit
+		then delta y = m * delta x = m
+		so, given some yk on our line, y(k+1) = yk + delta y = yk + m
+
+	Algorithm with slope between zero and one:
+		Given (x1,y1),(x2,y2)
+		Calculate slope: (y2-y1)/(x2-x1) = m
+		x = x1
+		y = y1
+		while x <= x2:
+			drawPoint(x,y)
+			x = x + 1
+			y = y + m
+		endwhile
+
+[Expect week 4 for first CS 316 Quiz]
+
+If we have 0 < m < 1 for m > 1 (Same algorithm, but stepping along y+= 1 instead of x. Then find delta x instead.)
+For m < 0, start at P2 and increment x (or y, depending on steepness) by -1
+
+Why is DDA a "bad" algorithm:
+
+	- Each iteration, we increment y using a small floating point value
+	- Introduces rounding error for long lines
+	- Uses inefficient floating point operations (prefer integer operations)
+	- Only for lines (want an approach that can generalize to other shapes)
+
+BETTER LINE RASTERIZATION ALGORITHM:
+
+	- Breshenham's Algorithm:
+
+	Why is this better? (Remember, this isn't math, so efficiency matters):
+		- solving engineering problems
+		- take advantage of entire problem domain
+		- whenever possible, use integer math (more exact/more efficient)
+
+	(Look to graph for problem setup)
+	Problem has become:
+		given (ik, jk)
+		is next pixel(ik+1, jk)
+				  or (ik+1, jk+1)
+
+	(some steps on hw 1 solution paper):
+
+	d1 > d2 => d1 - d2 > 0
+
+	So, d1 - d2 > 0 => j' = jk+1
+		else =>		   j' = jk
+
+	Note: ik+1 = (ik) + 1
+		Recall: y = mx + b      so     j = m((ik) + 1) + b [point on line corresponding to (ik+1)]
+		then:
+
+		d1 = j - jk
+		and 
+		d2 =  jk+1 - j
+		 	= (jk + 1) - j
+		 	= jk + 1 - m(ik+1) - b
+
+	So: d1 - d2 = 2m(ik + 1) - 2jk + 2b - 1
+
+	Recall m = deltay/deltax which is floating point
+		Substitute m = delta i/ delta j (integers)
+		Recall 0 < m <= 1 => delta i > 0
+			Specifically deltai * (d1 - d2) will have sign as d1 - d2
+
+		Let our decision parameter Pk be defined:
+			Pk = deltai * (d1 - d2)
+				= deltai * (2 * (deltaj)/deltai) * (ik + 1) - 2jk + 2b - 1)
+				= (2*deltaj * ik) + (2* delta j) - (2 * deltai * jk) + (2*deltai * b) - (delta i)
+				= (2*deltaj * ik) - (2*deltai*jk) + c where c is simplified constants from last equation form
+		- given (ik, jk) we can now calculate Pk using integer math.
+			Pk >= 0 ==> j' = jk
+			Pk < 0  ==> j' = jk+1
+
+How does Pk change for next iteration (Pk')?
+
+Pk' = 2*deltaj*(ik+1) - 2 * delta i * j' + c     where j was either jk or jk+1
+Pk' - Pk = 2 * deltaj*(ik+1 - ik) - 2*deltai*(j'-jk) where (ik+1 - ik) is 1, so,
+Pk' - Pk = 2 * deltaj - 2*deltai*(j' - jk)      if j' = jk   ==> 0
+												if j' = jk+1 ==> 1
+
+Pk' = Pk + 2 * deltaj - 2*deltai*(j' - jk)
+
+given Pk and i' at step k, we can calculate Px'
+
+Need initial value of Pk --> "P0"
+P1 = (i1, j1)
+insert these into the equation for Pk reduces to:
+P0 = 2 * deltaj - delta i
+
+[NOTE: Lab Computers in Room CS 115: Configured with Ubuntu and OpenGL 3.0]
+	Door Combo: Hold 2&5 then 1
+
+packages:
+	mesa-utils
+	mesa-common-dev
+	libglut-mesa-dev
+	freeglut3-dev
+
+OpenGL does not contian GUI functionality
+We will use GLUT (freeglut): OpenGL Utility Toolkit
+	- provides basic GUI features
+	- crossplatform
+	- free
+
+Interactive CG apps are event-driven/dynamic:
+	- execution flow of control determined by run-time events
+	- intially:
+		- setup data structures and GUI
+		- register "event handles"
+			- function called in repsonse to events
+		- enter mian event processing loop:
+			- you have no direct control
+			- loop recieves/handles events
+
+GLUT can handle basic GUI events:
+	display: whenever VP needs to be redrawn
+	reshape: when VP is resized by user
+	keyboard: when a key is pressed, etc.
+
+GLUT handles events using "callbacks"
+	- a callback function is a function that will be called when a specific event occurs
+	- the callback function for each event has a specific signature
+
+Ex: callback for reshape event:
+	void funcName(int width, int height) [where width and height are new VP dimensions in pixels]
+
+To register callback for specific event, call the appropriate GLUT function
+	Ex: glutReshapeFunc(funcName);
+
+For Lab 2, we will be drawing 2D graphics primitives (points, polyline, polygons)
+
+How represent in C?
+	- array of vertices
+	- one OpenGL approach is "vertex array"
+		has form: x1, y1, x2, y2, x3, y3, ...  etc.
+		where each is a floating point value
+
+- Data types: OpenGL provides type defs for common data types
+with known sizes
+
+	C:				OpenGL:
+	float 	-> 		GLfloat
+- vertex array is array of GLFloats
+
+Conceptually: want array of x/y pairs (points, instead of individual floats)
+We can define:
+	typedef struct Vec2D {
+		GLfloat x;
+		GLfloat y;
+	} Vec2D;
+
+Use array of Vec2D's for our 2D vertex array
+	- will ahve same memory footprint as an array of GLfloats
+
+Default VP Coordinates are normalized device coordinates
+
+(-1,1)
+|--------------------------------|(1,1)
+|								 |
+|								 |
+|								 |
+|			(0,0)				 |
+|								 |
+|								 |
+|								 |
+|--------------------------------|(1,-1)
+(-1,-1)
+
+
+- Q1 is on Tuesday [] (1 hour in length)
+- Can have one 8.5x11 note cheat sheet
+- It will cover up through today
+- Know Breshenham's and DDA (not going to be supplied on test, so put on cheat sheet)
+- Understand the idea of the proof for Breshenhams' algo (know the idea: why is this special)
+- No code (but some questions about OpenGL)
+- Know the general timeline given (also know Ivan Sutherland and Alan Kay)
+
+
+Output of rasterization:
+	- fragments: the per-pixel values associated with a single graphics primitive
+		* all fragments for a given pixel are combined to get the final pixel color
+Rasterizing lines causes aliasing effects:
+	- distortion due to low frequency sampling ("undersampling")
+	- causes "jaggies" / "stair-stepping"
+
+Shannon's Sampling THM:
+	- A signal can be reconstructed without information loss if the sampling frequency is
+	at least twice the highest freq. of the signal.
+		2x highest-frequency -->  "Nyquist Frequency"
+
+Lines are 1 pixel thick. Viewed "sideways"
+			----
+signal   __|    |_____
+	        line   noline
+	
+	frequency = 1 pixel
+	if highest frequency is 1 pixel, need to sample twice per pixel
+
+	PROBLEM: Pixel == sample
+
+Solutions:
+	1. Prefiltering: Assume more than two colors (ex: grayscale)
+		- Vary color around line edge to reduce "jaggies"
+		- view line as a "rectangle" and the less the rectangle intersects with a pixel, the lighter it will be color
+			* intersect rect with each pixel
+			* amount of overlap determines pixel color
+			* PROBLEM: expensive operation so it isn't used
+
+	2. Supersampling (OpenGL calls this "multi-sampling"/also called "post-filtering")
+		- Rasterize the line on a high-res "virtual" raster
+		To Do:
+			* divide each pixel into "virtual subpixels" (choosing odd number is good because a subpixel will be in center this way)
+			* rasterize to sub-pixel grid
+			* set pixel color based on number of subpixels in rasterization
+				[NOTE: often the subpixel also have "weight" where the center pixel often carries largest weight]
+
+Color: The number of unique colors limited by bits/pixel
+
+	n bits --> 2^n unqiue colors
+	which 2^n colors?
+
+2 approaches:
+	1. Color lookup table (CLUT):
+		- Create table of pixel value vs. color
+		- each pixel value is an index in the table
+		- useful if n is small
+		- CLUT animation: animation performed by siwtching between multiple CLUT's
+
+		in modern computing:
+			32 bits of info/pixel where 24 bits are color (too big for CLUT)
+				2^24  is approximately 16 million colors
+
+	2. Color Space/Model:
+		- Most commong color space is RED, GREEN, BLUE (RGB)
+			* known as the Additive Primary Colors
+			* can add different values of R, G, B to mix for other colors
+			* We refer to R, G, and B as components
+				(common monitor technologies use triad of RGB subpixels at each pixel)
+
+		Think of RGB color space as a 3D space (cube) where z = R val, x = B val, y = G val
+			Written in coordinates (x,y,z) = (R,G,B)
+			Generally the values go from 0.0 to 1.0 (1.0, 0.0 , 0.0) = pure red
+				ex.) (1.0, 1.0, 1.0) = white
+					 (0.0, 0.0, 0.0) = black
+
+
+		TWO 0THER IMPORTANT COLOR SPACES:
+			1. CMYK: cyan, magenta, yellow, black
+					 reflective primary colors
+					 used in printing
+			2. HSB: Hue, Saturation, brightness
+				attempt to mimic how humans interact with color (started by Apple)
+
+
+			OpenGL uses RGB:
+				- 24 bits -> 8 bits/component
+					2^8 = 256 possible values/component
+					Could specify with ints: 0 to 255
+								or floats  : 0.0 to 1.0 [we will use floats]
+
+
+		Web colors also exist: ff00ff -->  ff 00 ff
+							              {R}{G}{B}
+
+    Often add fourth color component (transparency)
+    	"alpha channel" = RGBA color
+
+   	where 0.0          -->        1.0
+   		   transparent            opaque
+
+   	OpenGL uses RGBA color
+
+   	Can change the background color in OpenGL
+   	gClearColor(r,g,b,a);
+   	then
+   	gClear(GL_COLOR_BUFFER_BIT);
+   		(sets all pixels to current clear color)
+
+   	Grpahics Primitives
+
+   	(World Space)
+   		 *
+   		/ \    -->  normalized device/VP coordinates   .... Look at photo in folder CS316WorldSpaceOne.jpg and ""Two.jpg
+   	   /___\
+
+   	   Fragment processing happens after rasterization of fragments. Then combine the images and create final image
+
+
+
+   	Fixed Function Pipeline done away with (after OpenGL 3.3) and now GLSL uses "shaders" [required in OpenGL 3.3]
+   	[side note: Direct3D also has done away with fixed function pipeline]
+
+   	GLSL (OpenGL Shading Language):
+   		- C like language for writing GPU programs
+   		- C syntax for:
+   			* operators
+   			* loops/conditionals
+   			* functions
+   				- built-in: includes common funcs:
+   					* ex: sin, cos
+   		- additional syntax for graphics-specific programming
+   			ex.) vec4 type
+
+   	GLSL programs are called "shaders"
+   	- latest OpenGL allows for 8 different shader types,
+   		corresponding to different pipeline stages
+
+   	- 2 are required/most common:
+   		Vertex Shader (VS): takes in attributes of a single vertex and 
+   		transforms 
+   		passes the 
+
+
+   		Fragment Shader (FS):
+   			operate on single frag
+   			VS/FS are run on all verts/frags
+   				- allows for pieplining and parellelization
+   				
+
+   	- in your C program, a shader is just a string
+   		- for convenience, usually read-in from a text file
+
+   	- OpenGL provides functions to compile and link the shader on the GPU
+
+   	Keep shaders small and simple:
+   		- want these to be high performance
+   		- compile/link tools are primitive
+
+   	Shaders are linked into a "shader program" --> loaded into GPU
+
+   	- OpenGL always uses integers to identify specific GPU program (variables, etc.)
+   		- "handle", "name","location"
+   	Shader program in our C program has a handle (as a GLuint) [an unsigned int]
+
+   	Shader file extension conventions:
+   		- VS -> .vert
+   		- FS -> .frag
+
+   	1st line of every shader
+   	#version #
+   	- tell GPU waht version of GLSL
+
+   	Every Shader-type has predefined variables
+   	Ex:
+   		VS 
+   		gl_Vertex -> vec4 (array of 4 floats)
+   			-> original coordinate    (x,y,z,w) where z = 0 for 2D and w (for homogeneous coordinates) must always be 1
+
+   		gl_Position -> vec4    -final, transformed coords
+
+   		FS:
+   		gl_FragColor
+   			-vec4 -> RGBA
+   			- set to final fragment color
+
+
+Affine Transformations:
+
+[Rotate, scale, and translate point]
+Initial Point (x,y)
+Rotate by theta degrees (convert to radians for C and GLSL)
+x' = x*cos(theta) - y*sin(theta)
+y' = y*cos(theta) + x*sin(theta)
+
+Scale by scaling vector (xscale,yscale) (or single scaling factor)
+x' = x' * xscale
+y' = y' * yscale
+
+Translate by (tranx, trany)
+x' = x' + tranx
+y' = y' + trany
+
+
+[Rotation around arbitrary point]
+For point (x,y) rotated theta degrees around a center point c = (a,b)
+
+Translate system to origin:	(x - a, y - b)
+Rotate about origin by theta degrees:
+	(Convert theta to radians)
+	x' = x*cos(theta) - y*sin(theta)
+	y' = y*cos(theta) + x*sin(theta)
+
+Undo tranlsation of system:
+	final point = (x' + a, y' + b)
+
+Tentative Plan:
+	Today: 	- Lecture on Matrices
+		 	- Assign Lab 4 (stricly math lab)
+	Tuesday:
+			- Lecture (Matrices in GLSL)
+			- Assign Lab 5 (Lab Time)
+	Thursday:
+			- Quiz 2
+			- Lab Time
+
+Problem: want some efficient way to work with sequences of affine transforms
+
+Affine Transforms: all linear (or first order) equations (i.e. no exponentiation; just constants and constants times variables)
+Solutions: Matrices allow us to efficiently manipulate systems of linear equations
+
+Matrix: a rectangular array of numbers (2D)
+[normally named with cap. letters]
+
+	___ 				___
+A = |	10.2		42	   |
+	|	0.99		2.11   |
+	|	22.4		0.2	   |
+	|__ 				___|  	rows count from 1 to m down
+								columns count from 1 to n across
+								Each element indexed by (row,col) = (i,j)
+	Express size of matrix by row x cols
+	Ex.) the above example is a 3 x 2 matrix
+
+Matrix Addition:
+		If A and B are two m x n matrices (if they are different dimensions: undefined)
+		then A + B = C with csub(i,j) = asub(i,j) + bsub(i,j)
+
+		* Matrix addition is commutative and associative
+		* For any n, there exists an n x n Zero Matrix, such that, A + 0sub(n) = A
+
+
+Matrix Multiplication:
+	Generalization of vector dot product: In R^n (some n dimensional real vector),  P1 = (a1,a2,a3,....,an)
+																					P2 = (b1,b2,b3,....,bn)
+																				P1 * P2 = (a1b1 + a2b2 + .... + anbn)
+																				Results in scalar value
+	Given two matrices, A is an m x p matrix, and B is a p x n matrix (num of cols in A must be num of rows in b or mulitplication undefined)
+
+	Define Product of A and B as AB = C
+				where C is an m x n matrix where elements of C are dot products.
+				csub(i,j) = Asub(rowi) * Bsub(colj) [Note: entire row dotted with entire column, adding all products and creating scalar value]
+	Matrix Mult. is associative, but it is not commutative (unless square matrices)
+	For any p there is a p x p matrix Isubp called the identity matrix such that for any m x n matrix A
+		Isub(m) * A = A * Isub(n) = A
+	Isub(p) is the p x p matrix that has all zeroes save for ones across the diagonal
+
+How do we define affine transforms as matrix arithmetic:
+
+Translation:
+	P(x,y)				P' = (x' = x + tx, y' = y + ty)
+	T(tx,ty)
+
+	We can turn P into a matrix as, either, a single col or single row
+	We will choose to treat them as a column vector (as that is what is traditionally done in OpenGL)
+	So, then T(tx,ty) can be treated as a col vec as well, such that P + T = P'    [write every step on lab 4]
+
+Scaling:
+	P(x,y)
+	S(sx,sy) where matrix S(sx,sy) = [sx 0
+								      0 sy]
+	Premultiply P by S:
+		 P' = S(sx,sy) * P
+		    = SP
+		    = [sx  0   [x
+		       0  sy]	y]
+
+Rotation:
+	P(x,y)  and R(theta) =	[cos(theta) -sin(theta)]
+							[sin(theta)	 cos(theta)]
+	Dot product of elements will yield original equation for rotation
+
+
+GOAL: Want to perform arbitrary sequence of affine transforms
+ex.) rotate by theta around an arbitrary center:
+	1. trans center to origin 	2. rotate 	3. translate back
+
+By multiplying the matrices of the sequence of affine transforms, we can
+create single matrix (known as the Composite Transformation Matrix) that will
+encase all desired transforms. Would allow one matrix operation on each vertex instead
+of three
+
+Say we want to: 1. rotate thirty degrees about origin
+				2. uniform scale by 2
+			Then P^(r) =  RP
+			And  P^(sr) = SRP
+			Then SRP = P'  [let C be compos. transformation matrix SR]
+			so 	 CP  = P'
+
+NOTE: Because we are premultiplying, transforms are applied in reverse order (from right to left)
+
+So can combine scaling and rotation, since both use mult.
+BUT, trans was defined using addition
+
+SOLUTION:
+Homogeneous Coordinates: allow us to define translation using matrix mult
+	- add extra w component to each vector. 
+	ex.) 2D: (x,y) -> (xsub(w),ysub(w),w)   where x = xsub(w)/w
+											and   y = ysub(w)/w
+	For current purposes, we can set it to one (until we talk about distance and perspective)
+
+Using this, we can now represent T(tx,ty) as follows: 3 x 3 matrix t(tx,ty) =	[1	0	tx]
+																			 	[0	1	ty]
+																			 	[0	0	 1]
+Then, P' = T(tx,ty) * P =	[x + tx]
+							[y + ty]
+							[	1  ]
+
+For rotation and scaling, need 3 x 3 matrices that leave w unchanged
+R(theta)=	[cos(theta)	-sin(theta)	0]
+			[sin(theta)	cos(theta)	0]
+			[0				0		1]
+
+S(sx,sy) =	[sx		0		0]
+			[0		sy		0]
+			[0		0		1]
+
+Now we can combine arbitrary sequence os R's, S's, and T's
+C = Asub(n)....Asub(2)Asub(1)
+then P' = CP
+
+
+EX: Rotation about an arbitrary point: (xsub(c),ysub(c))
+P' = T(xsub(c),ysub(c))R(theta)T(-xsub(c),-ysub(c))P
+	= TtwoRTOneP
+	Translate to origin, rotate, translate away from origin
+
+Original OpenGL "fixed function" pipeline
+identified three matrices:
+	- compostive vertex transforms...
+
+	* model matrix
+	* view matrix
+	* model view matrix
+
+Also had differing model spaces and a world space
+
+
+Need to take into account the viewpoint (also called camera or eyepoint)
+Also have "camera space" where eyepoint is translated to the origin and oriented to where y is up direction.
+Viewpoint is origina, axes aligned with VP
+This was called the view matrix
+
+NOTE: Modeling transforms move objects in a fixed coordinate system (world coordinates)
+
+Viewing transform moves a coordinate system (camera space) around fixed objects.
+(Any Modeling Transformation has an equivalent Viewing Transform [they are equivalent])
+
+Fixed pipeline combines into single "MODEL/VIEW MATRIX"
+
+composite matrix:  VM  [where model is applied first and then viewing transform after]
+
+To get from camera space to Normalized Device Coordinates (NDC) --> (-1 to 1 in x and y)
+	- Need to add a projection matrix. 
+		* in 3D may involve persepctive
+		* in 2D can use orthographic projection (has no perspective)
+
+		Must define clipping plane. 
+
+P' = S(2/deltax,2/deltay)*T(-xmin + deltax/2, -ymin + deltay/2)*P
+
+2D orthographic projection matrix:
+
+[2/right-left		0				-(right + left/right-left)]
+[0				2/top-bottom		-(top+bottom/top-bottom)  ]
+[0					0							1			  ]
+
+
+Recall: X' = PVMX
+
+Quiz 2 through here
+
+
+Matrices have evolved in OpenGL
+
+-Fixed function:
+	provided MV != P matrix and functions to manipulate
+-Replaced with GLSL uniforms for MV and P
+	with reduced functionality
+-Latest: You are all on your own
+
+Loss of OpenGL matrix functionality led to 3rd party matrix libraries
+	- most popular: GLM
+		- C++
+		- "non-standard"
+
+We still need to do matrix mult (MM) ex: C = PVM where perform?? C program (CPU) or GLSL program (GPU)
+
+- GPU probably faster for simple MM but shader executed once/vertex
+	MVP is constant for all vertices
+- Common advice: build MVP matrix in C, and pass to vert shader
+	But, GPU compiler will most likely optimize away multiple MM's
+
+**** We will do MM in GLSL (don't need third party library and practice with GLSL) ****
+Still need to create matrices in C (to pass to vertex shader)
+Can create 1D array to store 2D of info.
+
+2 approaches:
+	1. Row Major:
+		Consecutive elements of a row are consecutive in memory
+	2. Column Major:
+		Consecutive elements of a column are consecuite in memory
+
+C usese row major for 2D arrays. GLSL uses column major
+	- Using C 2D arrange is problematic
+
+Solution:
+	Note: we are using only 4 x 4 matrices = 16 elements
+	So use a 1D array of 16 GLfloats
+	Draw a "map" of 1D locations
+
+Kevin created simple matrix library:
+	- allows you to create matrix and declare vairable
+	- set to identity matrix
+	- set to scaling matrix
+	- set to rotation matrix
+	- set to tranlsation matrix
+	- set to ortho2D
+
+2D veiwing transform
+	pan -> move left/right/up/down
+	zoon -> in/out
+	(rotate)
+
+	could do this 2 ways:
+		1. view matrix that translates and scales
+		2. use our orthographic projection matrix
+
+- Pan - shift clipping plane
+- Zoom - make clipping rectangle bigger or smaller
+
+Panning and zooming require animation:
+	Problem: currently, a single image buffer is being rendered to while it is being displayed 
+			* can cause flicker of image
+
+Solution: Double Buffering
+	2 image buffers 
+	"back buffer" -> draw to
+	"front buffer" -> dispalyed on screen
+	- Draw into back buffer until complete, then "swap" the roles of the buffers
+
+Do in GLUT:
+	1. setup double buffering
+		glutInitDisplayMode(GLUT_DOUBLE);
+	2. when new drawing needs to occur:
+		glutPostRedisplay();
+			-adds dispaly event to event queue
+			-will call our dipslayCB (do not call displayCB directly)
+
+	3. When drawing complete,
+		glutSwapBuffers();
+			-calls glflush and swaps buffers
+
+
+3D Coordinate System:
+
+(x,y,z)		[think traditional 3D plane]
+That orientation is a right-hand [use right hand rule to find orientation type]
+
+Despite being what is used in math, graphics traditionally uses left-handed system [like DirectX]
+
+If camera is at origin, z-coord of object is the distance from the camera
+
+But OpenGL uses RH coordinates
+
+3D transforms:
+	* work just like 2D transforms
+	* use 4D homeogeneous coordinates and 4x4 matrices
+
+S(sx,sy,sz) = 
+				[sx 	0		0		0 ]
+				[0		sy 		0		0 ]
+				[0		0		sz 		0 ]
+				[0		0		0		1 ]
+
+T(tx,ty,tz) = 
+				[1		0		0		tx]
+				[0		1		0		ty]
+				[0		0		1		tz]
+				[0		0		0		1 ]
+
+Rotation: needs to be defined relative to some axes
+	Ex. arbitrary vector 
+	Ex. separate matrix 
+						Rsubx(theta)
+						Rsuby(theta)
+						Rsubz(theta)		<-- rotation about pos. axes
+
+our 2D rotation was rotation about z.
+
+So Rz(theta) = 
+			[cos(theta)		-sin(theta)		0		0]
+			[sin(theta)		cost(theta)		0		0]
+			[0					0			1		0]
+			[0					0			0		1]
+
+Rx and Ry defined similarly (we can compose these rotations [ORDER MATTERS])
+
+
+3D camera space:
+
+eye at origin looking down -z axis
+
+NEED to transform from 3D camera space to 2D image space
+Use a projection: a function that maps from 3D to 2D
+
+Ex.)  P1 *--------------------->|					[points out in space and a 2D projection plane (z = 0 in OpenGL)]
+								|
+			*P2---------------->| 				[projection lines map 3D P1 and P2 to 2D P1' and P2']
+
+
+Simplest projection: (x,y,z) ---> (x,y,0)  [example of an orthorgraphic projection]
+Called orthogonal as projection lines are perpendicular (orthogonal) to projection plane
+
+Clipping planes 2D: y in [-1.0, 1.0] and x in [-1.0, 1.0]
+
+In 3D:	We have "View Volume"
+
+x in [-1.0, 1.0]; y in [-1.0, 1.0]; z in [-1.0,1.0]
+Results in a cubic viewing space [some people refer to this as unit cube]
+
+Projection matrix should transform from camera coords to clipping coords
+If out view volume in camera space is a rectangle, can define a 3D orthographic projection
+
+For more realism use a perspective projection [look to Orthographic Projection Matrix paper]
+Foreshortening: farther object is from camera, smaller it is in image
+
+View volume in camera space is a frustrum (truncate pyramid)
+
+NOTE: the -1 in the last row of Mprojection. This will transform w component to -z
+
+OpenGL automatically scales vertex by 1/w (ex. 1/gl_Position.w)
+Farther objects will have greater z's, therefore, more foreshortening
+
+Representing Objects in 3D:
+
+2 basic CG approaches:
+	1. Boundary Representation (B-REP):
+		* describes object surface (useful for object exteriors)
+	2. Space Partitioning Representation:
+		* want to view interior of objects
+		* divide space into cubes (or any other desired shape)
+		* assign each shape as "inside", "outside", or "boundary" of object
+		* can assig attributes to shapes (color, transparency, etc. to more easily view model)
+		* render with volume rendering
+		* useful for viewing obj interiors (ex: medical imagery)
+
+B-REPS:
+	Most common: polygon mesh
+	Object surface is represented as a set of polygons (often approximate representation)
+	ex.) sphere's cannot be reprented as is, so we "tile" with a polygon. Then, if small enough, approximation should look like sphere
+		* more polygon --> better approximation
+	The most common polygon to use for polymesh is triangle mesh
+		* Modern OpenGL only allows triangles for polymesh
+WHY?
+
+	Trianlges are the smallest polygon (simplest; so fastest to render)
+	OpenGL provides efficient data structures for triangle meshes (talk about later)
+	Only polygon guaranteed to be "simple" after projection
+		* simple: non-self-intersecting
+		* This matters because efficient rasterization algs work on simple polygons
+
+Other polys not guaranteed to be simple after projection. 
+Ex.) proj (edge on), but due to rounding error could become self-intersecting
+
+Recall: more polygon lead to more accurate representation, but more polygons leads to more storage space/time
+	- Need ways to efficiently manipulate our mesh
+
+
+Mesh representation: 
+	* Explicit representation: for each face in the mesh, explicitly specify vertices
+
+	Ex.) tetrahedron (on a unit cube) with origin at center
+		Then explicit representation would require defined set of all vertices of each face
+		* This has redundancies as each face will share some vertices (becomes very wasteful)
+
+NOTE: because all tri's line on same surface, they share vertices
+	- if same vertex sent to GPU mult times:
+		* inefficient
+		* also have to transform same vertex multiple times
+		* if different faces undergo different transforms, vertex could be changed (rounding error could cause gaps in representation)
+
+SOLUTION: Pointers to Vertex List Representation
+	- Create a list of all distinct vertices
+	- Describe each face as set of 'pointers' (array indices into Vertex List)
+		* now each face described by three integers instead of three floating points
+		* now only transform once and only exists once in memory
+
+3D Drawing in OpenGL:
+	- could define a struct for three dim coords {GLfloat x, y, z} vec3D
+
+NOTE: Default eye position is the origin 
+	* so camera would be inside of obj centered on the origin
+	* thus, position eye elsewhere and use a view transform to move to origin
+
+
+Rendering Solid Models:
+
+ - In 3D, each polygon consists of two polygon (front face and back face)
+
+ OpenGL knows which is which based on vertex order
+ 	- Verts specified in CCW order from thef ron
+
+ 	V1,V2,V3 (front)
+ 	V2, V3, V1 (behind)
+
+We can specify drawing mode for each pol front/back [glPolygonMode(face,mode)]
+face could be GL_FRONT, GL_BACK, GL_FRONT_AND_BACK
+mode could be GL_POINT, 	GL_LINE, 	GL_FILL
+				(verts), (wireframe)	(filled polygon)
+
+Hidden Surface Removal:
+	- Determine which surfaces are visible from the current viewpoint
+
+	Commong algos:
+		- Painter's algo: sort polys by distance from viewpoint, then draw from the farthest-to-closest
+			* Works well if all polys are convex and don't intersect.
+		- Z-Buffer (Depth Buffer): When poly rasterization indicates a pixel should be colored, (i.e. fragment is produced),
+								   calculate the "Z-value" (z-depth) of that pixel
+					- because we are in eye space, the z-value of a pixel is literally the distance in the z dimension (-z)
+					START: 
+					initialize all pixel z-value to ZFar value
+					for each fragment, 
+						if current value > the near Z-value
+							replace z-value and color 
+					else 
+						pixel not changed
+
+In OpenGL:
+	Initialize Z-buffer:
+		glutInitDisplayMode(GLUT_DEPTH/...etc.);
+		glEnable(GL_DEPTH_TEST);
+		glDepthMask(GL_TRUE);
+
+to clear:
+	glClear(GL_DEPTH_BUFFER_BIT | etc...);
+
+Note: z-buffer has limited precision, so make znear and zfar as close as possible
+
+		- Back-Face Calling:
+			Don't draw any poly that is facing away from the viewpoint ("back polys")
+		In OpenGL: glEnable(GL_CULL_FACE);
+
+Surface Rendering Algos:
+	1. flat-shading: draw each poly with a single color
+	2. smooth-shading: assign a color to each vertex, then interpolate colors across the surface
+		OpenGL uses bilinear interpolation (linear interpolation in two dimensions)
+	3. Illumination model: models the interaction between light sources and surfaces
+		- object color (what frequencies does this reflect)
+		- material/surface properties (rough?/smooth?)
+		- available light properties (ex: red light -> object will be red)
+		- the angular relationships between the edge, the light source, and the surface
+
+
+	Need some vector math:
+		- a vector (x,y,z) can represent either: 
+			- a point location
+			- a vector: encodes direction and magnitude (length)
+
+
+	if V = (x,y,z)
+	the magnitude of V is
+
+		|V| = sqrt(x^2 + y^2 + z^2)
+
+	Often, we only care about direction, so we normalize the vector so magnitude is 1
+
+	- Vector Vn where |Vn| = 1.0
+	given v = (x,y,z) where can normalize Vn = (x/|v|,y/|v|,z/|v|)
+
+	Given two vector P1 and P2, we want vector from P1 to P2 = P2 - P1
+
+
+	Need to represent the dir the surface is facing
+	- use a vector normal (perpendicular to the surface)
+	(note: vector normal is not the same as normalized vector)
+
+	However, since we just want surface direction, we will normalize our vector normals
+
+	Determine normal vector N for each triangle
+		- can use vector cross product (vector product)
+
+	given two vectors with tail at the same point, C = A x B if C perpendicular to AB plane.
+
+	C = A x B,  cx = aybz - azby
+				cy = azbx - axbz
+				cz = axby - aybx
+
+
+	direction of C is determined by the right-hand-rule where C is the "thumb"
+
+	Assume we have an illumation model
+	2 classical approaches with it:
+		- Gouraud Shading
+		- Phong Shading
+
+
+	Gouraud Shading: Used in OpenGL fixed function pipeline
+	- algo:
+		* determine the vector normal at each vertex
+
+	- take the average of all coincident triangles
+		Say we have n triangles with normalized normals
+		N1,......,Nn, that share vertex P
+
+		then Np = (N1 + N2 + ... + Nn)/n
+
+
+	- Apply illumination model to each vertex to determine the vertex intensity (color)
+	- linearly interpolate intensities across each triangle
+		PROBLEM: highlights can get fuzzy
+
+	Approach #2:
+		Phong Shading:
+			- Calc vec normal at each vertex
+			- interpolate the normals across each tri surface
+			- apply illumination model to each pixel/fragment to determine intensity
+				- more realistc then gouraud, but more expensive
+
+
+The Classic Illumination Model: (Phong IM)
+	- used by OpenGL FFP
+	3 types of light sources:
+		- point light source: rays emitted in all direction
+		- directional light sources: rays emitted in parellel
+		- spotlight: rays emitted in a directed cone
+
+	Each light source produces 3 kinds of light (each RGBA vector):
+		1. Ia -> ambient intensity
+				 -> light that has been scattered so original direction is lost
+
+		2. Id: diffuse light; comes from a single direction
+							- scattered in all directions equally
+
+		3. Is: specular light:
+				- directed coherent light (ex: laser beam)
+
+	Each of these light components interacts with surface properties to produce pixel intensity:
+
+		II = (Ir,Ig,Ib,Ia)
+		Ia --interact--> IIamb
+		Id --interact--> IIamb
+		Is --interact--> IIspec
+
+	II is a combination of these.
+
+	Every surface has the following 5 surface/material properties:
+		1 Ie --> emitted light intensitiy (for objects that glow) 
+		2.ka --> ambient reflection coefficient (amount of ambient light reflected by surface)
+				0.0 ----> 1.0   (no reflection to full reflection)
+
+		3.kd --> diffuse reflection coefficient (how much diffuse light is reflected by surface)
+		4.ns --> (specular property discussed later)
+		5.ks --> (specular property discussed later)
+
+
+	How compute II?
+		1. IIem  = Ie --> emitted light is what it is 
+		2. IIamb = kaIa
+		3. IIdiff --> need to take into account both kd and the angle of incidence = kdIdcos(theta)
+
+			NOTE: Angle of Incidence: the angle that an incident line or ray makes with a perpendicular to the surface at the point of incidence.
+
+	Lambert's Law: Intensity is proportional to the cos(angle of incidence)
+
+		L is the vector from point to light source
+
+
+		Note: one defn of dot product:
+			N * L = |L||N|cos(theta)
+			So, if N and L are normalized, then N * L = 1 * 1 * cos(theta) = cos(theta)
+			So, IIdiff = kdId(N * L) [if N*L less than zero, light is under the surface] so
+			IIdiff = kdId(max{O,(N*L)})
+
+		Still need IIspec (next time)
+
+		So far, for light source i, we have (IItotal) ^i = (IIamb)^i + (IIdiff)^i
+
+		The intensity at a given point is c = IIem + sum((IItotal)^i)
+
+
+		IIspec = specular light intensity
+			- A specular reflection (highlight) is the total or near total reflection of incident light in a concentrated region
+
+		R - reflectance vector
+		V - view vector
+
+		- If surface "shiny" (i.e. a mirror), highlight only visible if V = R
+		- Most surfaces exhibit highlights over a finite range of phi
+			* shiny: range small
+			* rough/smooth: range big
+
+		R calculated as: R = 2(N * L)N - L 	(GLSL REFLECT FUNCTION)
+
+		ns = is the specular reflection parameter for surface
+
+		1 <= ns <= inf   (OpenGL goes from 1 to 128)
+	[rough]			[perfect reflection]
+
+
+		- Good way to model: Specular reflection is proportional to (cos(phi))^(ns)
+
+	ks - specular coefficient  0 <= ks <= 1.0 - describes absorption props of surface
+
+	IIspec = ksIs(cos^(ns)(phi))
+		[normalize V and R]
+	IIspec = ksIs(V * R)^(ns)
+
+	Additional Complication:
+		Light intensity decreases with distance (light attenuation)
+			(skip details)
+			(ignore for labs)
+
+	PHONG LIGHTING MODEL (FULL):
+
+		Contribution of a light, say i
+		is
+		IItotal = IIamb + IIdiff + IIspec (each with exponent i to differentiate between light sources)
+		Given n light sources, color C at some fragment:
+			C = IIem + sum(II^itotal)
+
+
+
+	OpenGL Shading:
+
+	- Vertex Attribute: Per-vertex data value 
+		EX: Position
+			normal
+
+		In vertex shader:
+			Ex: attribute vec4 position;
+				attribute vec4 color; (replace gl_Vertex)
+
+	- Read only in VS
+	- C prog access with glGetAttribLocation
+
+	How represent in C?
+		- 2 ways to do it
+			* Array with position data/could have another array for normals/another for colors
+
+			* Or Interleave attributes into single array
+
+			typedef struct {
+				vec3d posit
+				vec3d norm
+			}Vertex;
+
+			Vertex verts[] = vert0 -> {{x,y,z},{nx,ny,nz}}
+
+	How to pass between C and GLSL?
+		- Buffer Object: An area of memory on the GPU. Used to upload data for fast rendering
+
+			* Specific type of Buffer Object is Vertex Buffer Object (VBO)
+			Buffer object used to store vertex data
+
+		Three steps to use VBO
+			1. Generate Buffer ID
+				glGenBuffers
+			2. Make it the active buffer
+				glBindBuffer
+			3. Allocate memory and upload data
+				glBufferData
+
+		We can store ceonnections between attributes and VBO's using a Vertex Array Object (VAO)
+
+		1. Generate VAO ID
+			glGenVertexArrays
+		2. Make is active vertex array object
+			glBindVertexArray
+		3. Associate each C attribute with a vertex shader attribute
+			glVertexAttribPointer
+
+		void glVertexAttribPointer(GLuint attributeID [which attribute is this], 
+								   GLint numComponents [in one of these], 
+								   GLenum type [component type i.e. GLfloat], 
+								   GLboolean normalized [if GL_TRUE values should be normalized else GL_FALSE use as is], 
+								   [unisigned int] GLsidei stride [offset between each of these in bytes], 
+								   const GLvoid* pointer [offset to the 1st of these])
+
+		How to pass values from VS to FS?
+
+		varying variables
+		Ex: varying vec4 fragColor;
+			declaration must match in VS and FS
+			Varying vars are  read/write in VS
+							  read-only in FS
+

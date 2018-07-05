@@ -1,0 +1,43 @@
+With a max ID of 250 and 0 items, it took 0.000000 milliseconds to insert.
+
+With a max ID of 250 and 250000 items, it took 6990.000000 milliseconds to insert.
+
+With a max ID of 250 and 500000 items, it took 35320.000000 milliseconds to insert.
+
+With a max ID of 250 and 750000 items, it took 97230.000000 milliseconds to insert.
+
+
+
+
+/*
+  COMMENT:
+	
+	Failed to run at 1000000 items after 10 minutes; I am making max data set test for this
+	experiment 7500000
+
+
+*/
+
+
+
+
+With a max ID of 500 and 0 items, it took 0.000000 milliseconds to insert.
+
+
+With a max ID of 500 and 250000 items, it took 3870.000000 milliseconds to insert.
+
+With a max ID of 500 and 500000 items, it took 20720.000000 milliseconds to insert.
+
+With a max ID of 500 and 750000 items, it took 48990.000000 milliseconds to insert.
+
+
+
+
+With a max ID of 1000 and 0 items, it took 0.000000 milliseconds to insert.
+
+With a max ID of 1000 and 250000 items, it took 1820.000000 milliseconds to insert.
+
+
+With a max ID of 1000 and 500000 items, it took 10650.000000 milliseconds to insert.
+
+With a max ID of 1000 and 750000 items, it took 26340.000000 milliseconds to insert.

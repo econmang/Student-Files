@@ -1,0 +1,19 @@
+Evan Conley
+Professor Nordquist
+CS 459
+6/1/2017
+
+Lab 3 Synthesis Questions
+
+1.	Is deadlock possible in your ReaderWriter application? If so, describe a test case that causes a deadlock?  If not, describe the steps you took to avoid deadlock.
+
+		I believe deadlock is possible as some of the threads may be waiting at the same time as another, each holding resources the other may need, resulting
+		in circular wait.
+
+2.	Describe the mechanism you used to ensure all application threads terminate?
+
+		We attempted to create an overriding terminate() method in the ReaderWriter class that would interrupt each thread currently running and then attempt to call
+		the schedule command on them, noting the interrupted flag. From there it has the ability to be handled locally by the catch clause for terminate method.
+		We implemented by utlizing the exception of a maxtime thread handled in the batchthread class. By finding out if the instance of the process was a ReaderWriter,
+		we could call its instance of the terminate method. Though they will stop processing, We are having trouble outputting some of these error messages 
+		handled by these exceptions though.
