@@ -1,0 +1,31 @@
+/* Sample program
+  in CMinus language -
+  computes factorial
+*/
+void main (void)
+{
+   int x;
+   int whileimatit;
+
+   /* read x; { input an integer } */
+   x = input();
+
+   /* if x > 0 then { don't compute if x <= 0 } */
+   if ( x > 0 ) {
+      /*     fact := 1; */
+      whileimatit = 1;
+      /*   repeat */
+      while (x > 0)
+      {
+	 /*     fact := fact * x; */
+	 whileimatit = whileimatit * x;
+	 /*     x := x - 1 */
+	 x = x - 1;
+	 /*   until x = 0; */
+      }
+      /* write fact  { output factorial of x } */
+      output(whileimatit);
+   
+   /* end */
+   }
+}

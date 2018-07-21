@@ -1,0 +1,70 @@
+package mazes;
+
+public class MazeTree
+{
+	private TreeNode root;
+	
+	public MazeTree(int[][] grid)
+	{
+		root = new TreeNode(0,0);
+		grid[0][0] = 2;
+		make(grid, root);
+	}
+	private void make(int[][] grid, TreeNode parent)
+	{
+		/* FOR each adjacentNode to parent in the array
+		   IF adjacentNode is valid
+		      Instantiate a node for adjacentNode
+		      Link adjacentNode to parentgrid[row][column] == 0
+		FOR each adjacentNode that was successfully created
+		   Recursively call make(adjacentNode) */
+		for (int i = 0; i < 4; i++)
+		{
+			switch(i)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+			}
+		}
+	}
+	private boolean valid(int[][] grid, int row, int column)
+	{
+		if((row < 8 && row >= 0) && (column < 13 && column > 0) &&(grid[row][column] == 0 || grid[row][column] == 1))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	private String depthFirstSearch(TreeNode thisNode)
+	{
+		return "" + thisNode;
+	}
+	public  String depthFirstSearch()
+	{
+		return "";
+	}
+	
+	
+	
+	public static void main(String[] args)
+	{
+		int[][] grid = { {1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1},
+						 {1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1},
+						 {0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0},
+						 {1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1},
+						 {1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1},
+						 {1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1},
+						 {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+						 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} };
+		MazeTree maze = new MazeTree(grid);
+	}
+}

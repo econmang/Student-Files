@@ -1,0 +1,25 @@
+	1.) The moon is a planet.
+	2.) The color of the sky is blue.
+	3.) An integer is primitive value type in the Java programming language.
+	4.) A byte is made up of 4 bits.
+	5.) Tacos are the superior food.
+	6.) Nirvana's Nevermind album was released in 1992.
+	7.) There were three members in the Beatles.
+	8.) The One Ring in The Lord of The Rings was forged by Celebrimbor, not Sauron.
+	9.) Chirality in chemistry referes to atomic asymmetry.
+	10.) The Harmonic Series is a convergent mathematical series.
+	11.) The theme song to Malcolm in the Middle was "Boss of Me" by They Might Be Giants.
+	12.) The >>> is an unsigned operator.
+	13.) Homer Simpson is on the main characters on the television program The Simpsons.
+	14.) Lisp is a common programming language used in the field of artificial intelligence.
+	15.) A tertiary predator is one at the bottom an ecological food chain.
+	16.) Sugar Gliders are marsupials closely related to the koala.
+	17.) Male seahorses are the ones who give childbirth in their aquatic relationship.
+	18.) Wrestling was a sport invented in the US for the WWE.
+	19.) No machine has ever passed the Turing Test.
+	20.) One wall of the cypher(Kryptos) outside the CIA has yet to be solved.
+	21.) Alan Turing aided in cracking the code of the enigma machine.
+	22.) The White House has never been destroyed.
+	23.) Bartolomeo Cristofori invented the piano.
+	24.) Sherlock Holmes was a great guitarist in Sir Arthur Conan Doyle's stories.
+	25.) Pneumonoultramicroscopicsilicovolcanoconiosis is the longest word in the English dictionary.

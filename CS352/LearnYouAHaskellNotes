@@ -1,0 +1,117 @@
+Learn You a Haskell Notes
+
+	Haskell is a functional programming language
+
+		funtional programming language tells the "how" of a program rather than giving abstract instructions.
+			Also values of variables cannot be changed once defined
+
+			This allows for referential transparency as calling the same function on the same variables will
+				always return the same result.
+			Also helps to be able to mathematically prove functions and create complex ones by gluing simple
+				ones together.
+
+	Haskell is statically typed (differentiates between value types); Also, though, uses a type inference which
+		means that you don't have to definitively label each item in the program.
+
+	To use unary minus, use parantheses:
+		ex.) 5*-3   [ bad  ]
+			 5*(-3) [ good ]
+
+	Equality operators:
+		== checks for equality
+		/= means not equal
+
+	Infix function [ex.) like the multiplication function defined by the notation: a * b where the * calls the function]
+		Most functions are Prefix functions.
+
+	succ function increments {means successor}
+
+	to call a function is Haskell, you name the function and pass it parameters separated by spaces
+		ex.) succ 8
+			 returns: 9
+
+	We can use backticks to declare a function without ambiguity
+		ex.) div does integral division
+			 div 91 10 can be confusing so we can use
+			 91 `div` 10 to call it as an infix function
+
+IF/ELSE:
+	If you use an if statment, an else is mandatory
+		ex.)
+			x = if x > 100
+				  then x
+				else x*2
+
+Functions:
+	functions cannot begin with capital letters in Haskell
+
+	When a function doesn't take any parameters, we normally call it a definition/name.
+		Also, because we can't change it's value, conanO'Brien and "It's a-me, Conan O'Brien!" can
+		be used interchangeably.
+
+
+
+Lists:
+
+	Strings: In Haskell, these are lists of characters
+	Lists (which are denoted by square brack [] ) are homogenous [must contain data of the same type]
+
+		You can use the keyword "let" in GHCI to define a variable directly without loading a .hs script
+		The ++ operator is used to concatenate lists:
+
+			ghci> [1,2,3,4] ++ [9,10,11,12] 
+			[1,2,3,4,9,10,11,12] 
+			ghci> "hello" ++ " " ++ "world" 
+			"hello world" 
+			ghci> ['w','o'] ++ ['o','t'] 
+			"woot"
+
+				Using this operator, the program has to walk to the end of the list to append it
+			You can use the : operator to append to the beginning of a list.
+				ex.) 'A':" SMALL CAT"
+					  "A SMALL CAT"
+
+		Lists contained in lists can be of different sizes but not of different types
+
+		The !! operator allows you to iterate through lists
+		The head function takes a list and returns its head (the first index of the list)
+		tail returns everything except the head
+		last gets last index of list
+		init returns everything except the last index
+
+		null : checks if list is empty
+		length : returns length of list
+		reverse : reverses a list
+		take : makes a sublist from a list
+		drop : removes the number of specified elements from a list
+		minimum :  takes the minimum of the list
+		sum : returns sum of the elements of the list
+		product : returns product of the list
+		`elem` : returns boolean of whether or not list has certain number of elements
+			ex.) 4 `elem` [0,2,21,5]
+				 True
+				 2 `elem` [0,22,45,1,12,0,6]
+				 True
+				 10 `elem` [1,2,2,2]
+				 False
+
+			You can use ranges to make lists of numbers:
+				[0...20]
+
+			cycle : function that takes a finite list and cycles through it to make an infinite one
+			repeat : function that takes an element and makes an infinite list out of it
+
+		Strings:
+			++ Concantenation operator
+			show : function that returns a value as a string
+			ex.) let a = 4
+			     show a 
+			     "4"
+			     (where the quotes are used to show a string, these are not actually returned)
+
+			set comprehensions:
+				[function of x | x <- [range for x], rule for ranges]
+
+				ex.) [x*2 | x <- [1..10], x > 10]
+					 [12,14,16,18,20]
+

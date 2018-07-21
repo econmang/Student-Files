@@ -1,0 +1,91 @@
+Compilers: Concepts, Principles, and Tools (Red Dragon Book)
+
+	1.1 Language Processors
+
+	- Compilers: Software System used to translate from programming language
+		to something executable by the computer.
+		- Reads from a source language and translates to a target language.
+		  Additionally it reports any error of the source language detected
+		  while translating.
+		  If the target program is an executable, it is capable of being called by
+		  a user to read inputs and produce outputs.
+
+	- Interpeter: Doesn't translate a target program, but, rather, takes a source program
+	  and its inputs and then produces outputs. 
+
+	  	- Compilers are faster at mapping inputs to outputs. An interpreter gives better
+	  	  error diagnostics because it executes the program line by line.
+
+	- Preprocessor: Collects pieces of the source program and may also expand shorthands
+	  (macros) into source language statements.
+	  - The modified program is then fed to compiler and produces assembly-language program
+	    as its output. This is beacause they are easier to create outputs for and debug.
+	  - Assembler: Processes assembly language and produces machine code as output.
+	  - Linker: Resolves external memory addresses of pieces of large code in memory.
+	  - Loader: Puts together all of the executable object files into memory or execution.
+
+	Source Program --> [Preprocessor] --> modified source program --> [Compiler] --> target assembly program --> [Assembler] -->    
+		relocatable machine code --> [Linker/Loader] --> target machine code 
+
+	1.2 The Structure of a Compiler
+
+	- Compiler can be broken into two parts: Analysis [Front End] and Synthesis [Back End]
+		- Analysis: Breaks source program into pieces and imposes a grammatical structure to them. This
+		  creates an intermediate representation of the source program. If source program is syntactically
+		  or semantically errored, the compiler must send informative messages to user to correct the action.
+		  Stores information from program into data structure called a Symbol Table, passed along with intermediate
+		  representation of source program.
+		- Synthesis: Constructs the desired target program from the intermediate representation and symbol table.
+
+		- Compilation can be broken further into phases.
+							Phases of a Compiler
+
+																									   [Symbol Table]
+	character stream --> [Lexical Analyzer] --> token stream --> [Syntax Analyzer] --> syntax tree --> [Intermediate Code Generator]
+		--> intermediate representation --> [Machine-Independent Code Optimizer] --> intermediate representation --> [Code Generator]
+		--> target-machine code --> [Machine-Dependent Code Optimizer] --> target-machine code
+
+	1.2.1 Lexical Analysis (Scanning)
+
+		- The first phase of compiling.
+			- Lexical Analyzer: reads stream of characters from source program (SP) and groups them into meaningful sequences
+			  call lexemes.
+			  For each lexeme, the lexical analyzer produces as output a token of the form:
+			  	<token-name, attribute-value>
+			  that is passed onto the next stage of compilation. This is where the token-name is an abstract symbol that is used
+			  during syntax analysis, and the attribute-value points to an entry in the symbol table for this token.
+			  - An entry in the symbol table holds information about the identifier name and type.  (page 6 for example)
+
+	1.2.2 Syntax Analysis (Parsing)
+
+		- Parser uses first components of tokens produced by lexer to create a tree-like representation that depicts
+		  grammatical structure of token stream. [Syntax Tree]
+
+	1.2.3 Semantic Analysis
+
+		- Semantic Analyzer uses syntax tree and symbol table to check for semantic consistency with language definitions.
+		  This is the phase that does Type Checking, where operators look for appropriate operands and report errors if there
+		  is a mismatch error.
+		  Coercions: Conversions done during semantic analysis that allow for successful compiling of a program. (Think casting to get
+		  a correct value)
+
+	1.3.1 The Move to Higher Level Languages
+
+		By Generation: First Generation (machine languages), Second Generation (assembly languages), Third Generation (higher level languages) [ex.) Fortran, Cobol, 
+		  Lisp, C, C++, Java], Fourth Generaation (language for specific applications) [ex.) Nomad], Fifth Generation (logic and constraint based language) [ex. Prolog, OPS5]
+
+		- Imperative: How a computation is to be done [ex. C, C++, C#, Java]
+		- Declarative: What computation is to be done [ex. ML, Haskell, Prolog]
+
+		- Von Nuemann Language (language based on computers with Von Nuemann Architecture) [ex. C, Fortran]
+
+		- Object Oriented Language: Consists of a collection of objects interacting with one another [C++, C#, Java, Ruby]
+		- Scripting Language: Language that is interpreted with high level operators that "glue together" computations
+			[ex. Awk, Javascript, PHP, Ruby, Python]
+
+	1.4 The Science of Building a Compiler
+
+		- Abstraction: can be used to generalize mathematical concepts to allow the infinite combination of programs to be
+		  interpreted by the compiler
+
+	1.6 (left off at)

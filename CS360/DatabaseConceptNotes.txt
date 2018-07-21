@@ -1,0 +1,222 @@
+Database Concepts Notes:
+
+Part One: Database Fundamentals:
+Chapter One: Getting Started
+
+	- Relational Database: 	contains a collection of separate tables where each table holds one "theme" (information related to one object)
+			[Table names appear in all caps: ex.) STUDENT(Name,IdNum) ; Column names start with a capital and work by camel case after that]
+
+	- Basic Modification Actions:
+
+		update, insert, select, delete
+
+		- Additionally, the keyword 'binary' can be added to force case sensitive searches
+			ex.) select * from Animal where binary name = ‘hunter’
+
+	- ID Columns are often used as keys to clear up any ambiguities involving people with the same name, where an ID number is assigned to each individual
+
+	- Structured Query Language (SQL): created to add/find information to connected "lists" that form databases so a user could gather needed information from the lists 							   without searching through each one individually
+
+	- database: collection of related tables and other structures
+	- Database Management System (DBMS): A software used to create, process, and adminster databases
+		Also keeps referential integrity constraints to avoid errors, concurrency, etc.
+	- database application: One or more programs that act as an intermediary between the user and a DBMS
+
+	- Database organizational tree:
+		users <-> database application <-> DBMS <-> database
+
+	- Metadata: data about the structure of a database. This includes table names, column names, properties, etc.
+
+	- referential integrity constraints: a property of data which, when satisfied, requires every value of one attribute (column) of a relation (table) to exist as a value of another attribute in a different (or the same) relation.
+	- Concurrency: Means actions of one user will not interfere with another.
+
+	- Personal Database System: Single user with small numbers of tables/entries for the sake of keeping track of either personal info/work info
+	- Enterprise-Class Database System: Many users, large number of tables with millions of entries. Different uses depending on user.
+
+Chapter Two: The Relational Model
+	
+	- Relations: 2D table of rows and columns where each column is an attribute and each row is an entry
+		ex.) Syntax in declaring a relation on paper: EMPLOYEE(IDnum, FirstName, LastName, Dept, Email Phone)
+	- Relational Model:
+		Table | File | Relation -> Row | Records | Tuple -> Column | field | attribute
+
+	- Database Schema: The design on which the database and its related applications are built
+
+	- key: One or more columns of a relation used to identify a row.
+		* these can be Unique or NonUnique
+
+	- Composite Key: Key that is determined by more than one attribute. Can be unique or non-unique
+	- Candidate keys: Keys or composite keys that uniquely indentify each row
+		* Primary key: 	the candidate key chosen to be used as the indentifier for rows for the DBMS (as in all candidate keys, these functionally determines all other 					attributes in a relation, but are chosen for the specific functional dependency chosen to be represented)
+			* These are underlined when writing a relation to show that they are the primary keys
+
+	- Surrogate Keys: An auto-numbered unique identifier made by the DBMS where each entry is given a new number, so there is, forcibly, no chance of duplicate data error
+		* This numbering, though, may cause some elements to contain duplicate information if a surrogate key is the primary key.
+	- Foreign Key: A key that is a primary key from another table
+		* Relations (tables) are linked/a relationship is shown through a foreign key
+
+	- Null Value: Missing value in a cell value of a relation.
+			* They are problematic as their meaning is ambiguous
+	
+	- Functional Dependency: is a constraint between two sets of attributes in a relation from a database. In other words, functional dependency is a constraint that 								 describes the relationship between attributes in a relation.
+	ex.) A box of cookies costs $5, therefore, the total cookie cost is dependent on the number of boxes bought: cookieCost = cBoxes * 5
+			- Therefore, cookieCost is functionally dependent on cBoxes bought. This is written in the form:
+								cBoxes -> cookieCost
+				and states that the number of boxes determines the cost of cookies. Things on the left of the arrow are called the determinant
+
+			- If you have more than one thing determining another, then use parantheses to show this:
+				ex.) c = a * b    would be written as  (a,b) -> c
+
+Normalization: The process by which a relation is broken into relations that all only have one theme. [They are of normal form (Boyce-Codd Normal Forms {BCNF} ) ]
+	Relational Design Principles:
+		- Well formed relation is one where every determinant of a functional dependency is a candidate key.
+		- Any relation that is not well formed should be broken into two or more relations (break down each relation to one theme)
+	
+	Normalization Process:
+		Normalization algorithm
+				To make a set of well-formed relations from an unstructured relation:
+				Make reasonable assumptions about data dependencies and document these assumptions.
+				Identify candidate keys
+				Identify other irreducible functional dependencies (FDs)
+				For each FD whose determinant is not a candidate key:
+				place all attributes of the FD (determinant and dependents) in their own relation and give this new relation a name.  Make the determinant the key for this new relation.
+				remove the dependents of the FD from the original relation, but leave the determinant in the original relation as a foreign key to the new relation
+				create a referential integrity constraint between the foreign key in original relation and the key of new relation
+
+	- Multivalued Dependency: (???)
+
+Chapter Three: Structured Query Language
+
+	- SQL: Used to query a database and select information from relations
+	- SQL DDL: Used to create and alter database structures
+
+	Creating a Table:
+						CREATE Table Name(
+							ColumnName DataType Constraint,
+							ColumnName DataType Constraint,
+							ColumnName DataType Constraint,
+							Optional Table Constraints
+							);
+
+	- Table Constraint Keywords:
+			- Default: Which sets a default value if no other is given
+			- Not Null: Which indicates a value must be given to add a row
+			- Null: Indicates that Null values are allowed
+			- Primary Key: sets that attribute as the primary key for the relation
+			- Unique: Indicates that every value entered a field must be unique
+			- Constraint: This keyword is used to address and add any constraints at the end of the table
+
+	- There are multiple datatypes, but generally we can remember blobs, ints, and varchar()
+	- You can create surrogate keys using the Identity(m,n) property of a table constraint:
+		ex.) CONSTRAINT Assignment_Pk Primary Key(employeeId, ProjectNum)
+
+	- You can set default results for actions as well using ON UPDATE {Action}, or ON DELETE {Action}, etc.
+
+	- You can use INSERT Keyword to insert data values into a table:
+		INSERT into tableName(attribute, attribute, attribute)
+		VALUES (example, ex, 1)
+
+	- SQL Comments:    You use the /* functionality */ found in many other programming languages.
+
+	- To pull datat from a relation you use Select statements, as in the example:
+		ex.)	SELECT {Data} FROM TableName Where {Condition}
+				- Additionally, you can use the wildcard operator to pull full records from a relation (*)
+				- You can also use AND or OR operators to add to the end of SELECT Statements
+				- IN: Allows you to find data in a range:
+					ex.) Select Numbers from Table in (0,1,2,3)
+							- To further this, you can also use the BETWEEN keyword:
+								ex.) Select Numbers From table in (0,3) or BETWEEN 0 AND 3
+				- NOT: Keyword to denote that values should not be in a specific set
+				- You can utilize Subqueries to find specific data:
+					ex.) Select {Data1} from Table1 where {Data1} in (Select {Data1} from Table2 Where {condition})
+				- Comparison Operators can be utilized as well: { > , < , >= , <= , = , <> }
+				- DISTINCT: This keyword makes sure that there are no duplicate records of a certain datatype pulled from the relation:
+					ex.) SELECT DISTINCT {Data} FROM TableName WHERE {Condition}
+
+				- LIKE: Keyword can be used to match patterns in a select Statement where a percentage sign is used to denoted freedom for the search to be matched
+					ex.) Select name from Students where name LIKE "Sa%"
+							- So any name that begins with 'Sa' will be pulled from the records for the select search
+				- IS NULL/IS NOT NULL: Checks for null or non null values in a Select search
+				- ORDER BY: You can choose the way in which data is ordered using this keyword by a specific group
+					ex.) Select studentID from Students where name LIKE "Sa%" ORDER BY studentID ASC
+				- ASC/DESC: Ascending or Descending Order of records as per a grouping. (This is shown in previous example)
+				- Group BY: Keyword to group records by similar values
+					- HAVING: Keyword to add condition of groups formed by GROUP BY
+
+	Built-In Functions:
+		- Sum: finds sum of pulled records
+		- Max: finds max of pulled records
+		- Min: finds min of pulled records
+		- Count: Finds the number of pulled records
+		- AVG: Finds value average of pulled records
+
+	Joins: This function allows the user to select/show information from more than one table
+
+	You can use the AS keyword to denote a table as an alias:
+		ex.) Select * From Animal AS A, AnimalOrder as O WHERE A.name = O.name;
+
+	In addition to the % sign wildcard, there is a _  underscore one to denote a single unkown character
+
+PART TWO: DATABASE DESIGN
+
+Chapter 4 Data Modeling and the Entity-Relationship Model
+	
+	Entity: Something the user wants to track (theme of a relation e.g. Customer or Employee)
+	Entity Instance: Instance of a given entity (e.g. Employee -> John Doe)
+	Attributes: Desctiption of the entity instance (e.g. Employee -> John Doe -> EmployeeID)
+	Identifiers: Attributes that can idenitify a specific entity instance (like a key for the relation)
+		* Can be unique, nonUnique, and composite
+
+	Entities can be related to one another; this is called a relationship
+	Degree: The number of entity classes involved in a relationship
+		* Can be binary or ternary, but binary is most common
+	Relationships can be:
+		- 1 to 1
+		- 1 to many
+		- many to many
+
+		These are determined by the count of related entity instances, called the cardinality
+		Max cardinality: max number of entity instances that can participate in the relationship
+		Min cardinality: min number of entity instances that can participate in the relationship
+
+			If min card = 0, then participation is optional
+			If min card = 1, then partic. is mandatory
+
+	This can all be shown with E-R models (Entity-Relationship Models)
+
+	- Weak entity: An entity that cannot exist in a table without another entity.
+		e.g. An entity of Color cannot exist if the parent entity Car does not exist
+
+	ID-Dependent Relationship:
+		Reliant on another entity for a name (composite)
+		e.g. BuildingNo. is a strong independent entity, but ApartNo. is a weak ID-Dependent entity as it is really idenitified by the compoite (BuildingNo.,ApartNo.)\
+
+Chapter 5 Database Design
+	**Describes more specific relationships and notation**
+
+	Update <TableName> Set <AttName> Where <Condition>
+	Delete From <TableName> Where <Condition>
+		- Delete will delete all rows that meet a certain condition. If no condition is given, then all rows will be deleted
+
+	Drop <tableName> (This will drop all of a table's data and its structure)
+	Alter Table <TableName> Drop Constraint <ConstName>
+	- Alter Table will alter a table's conditions or structure
+
+PART THREE DATABASE MANAGEMENT
+
+Chapter 6 Database Administration
+
+	- Databases can be queried when using external applications where actions can cause pieces of code stored in the DBMS to be inoked.
+		* the code that is invoked are called stored procedures
+		* While this occurs, constraints and referential integrity must be enforced
+
+	To ensure constraints and ref. integ:
+		- actions of concurrent users must not interfere with the results of the query
+		- security measures must be put in place to ensure safety of the DBMS
+		- backup and recovery information should be implemented
+
+	- Transactions: Sets of actions that have to be take as a unit for the database, or not at all.
+	- Concurrency Controls: Makes sure actions of a user does not innappropriately influence other users.
+
+Chapter 7 Database Processing Applications
+

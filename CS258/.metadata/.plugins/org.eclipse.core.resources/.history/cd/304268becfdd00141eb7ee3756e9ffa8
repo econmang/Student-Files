@@ -1,0 +1,53 @@
+package lab1;
+
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+
+public class Complex
+{  
+	private double real, imaginary;
+
+   public Complex()
+   {
+	   
+   }
+   public Complex(double real, double imaginary)
+   {
+	    real = this.real;
+	    imaginary = this.imaginary;
+	    
+   }
+   public String toString()
+   {
+	   String str = new String();
+	   return str;
+   }
+   public Complex add( Complex c)
+   {  return new Complex
+           (real+c.real, imaginary+c.imaginary);
+   }
+   public Complex minus(Complex c)
+   {
+	   Complex comp = new Complex();
+	   return comp;
+   }
+   public Complex product(Complex c)
+   {
+	   Complex com = new Complex();
+	   return com;
+   }
+   public Complex div(Complex c)
+   {
+	   Complex co = new Complex();
+	   return co;
+   }
+   public static Complex parseComplex(String str) 
+                    throws NumberFormatException,NoSuchElementException
+   {
+	   StringTokenizer stk = new StringTokenizer(str, "-+ ");
+	   Double real = Double.parseDouble(stk.nextToken());
+	   Double imaginary = Double.parseDouble(stk.nextToken());
+	   Complex c = new Complex(real, imaginary);
+	   return c;
+   }
+}

@@ -1,0 +1,34 @@
+package mazes;
+
+public class MazeTree
+{
+	private TreeNode root;
+	
+	public MazeTree(int[][] grid)
+	{
+		root = new TreeNode(0,0);
+	}
+	private void make(int[][] grid, TreeNode parent)
+	{
+		
+	}
+	private boolean valid(int[][] grid, int row, int column)
+	{
+		
+	}
+	private String depthFirstSearch(TreeNode thisNode)
+	{
+		return "" + thisNode;
+	}
+	public  String depthFirstSearch()
+	{
+		return "";
+	}
+	
+	
+	
+	public static void main(String[] args)
+	{
+		
+	}
+}

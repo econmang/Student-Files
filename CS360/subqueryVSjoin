@@ -1,0 +1,47 @@
+The inner query,
+
+   SELECT AnimalID
+
+   FROM SaleAnimal
+
+ is executed first and produces a list of values.  (AnimalID’s in this example.)
+
+ 
+
+The outer query,
+
+SELECT AnimalID
+
+FROM Animal
+
+WHERE AnimalID NOT IN
+
+ 
+
+Takes each record from the result produced in the FROM clause (each record in the Animal table in this example) and includes the record in the query result if and only if the value of the field specified in the WHERE clause (AnimalID in this example) is found in the list of values produced by the inner query.
+
+ 
+
+ 
+
+A join, produces a new temporary table from two existing tables.  Generally, this temporary table is used as the table in the FROM clause of the query, e.g.,
+
+SELECT E.LastName, S.SaleDate
+
+FROM Employee AS E INNER JOIN Sale AS S ON E.EmployeeID = S.EmployeeID
+
+WHERE E.ZipCode = "06101";
+
+ 
+
+The temporary table is formed by ‘gluing’ the two tables together by matching the values from one field of the first table (Employee.EmployeeID in this example) with the values from one field of the second table (Sale.EmployeeID in this example).  The matching algorithm is described in http://cs.sou.edu/~nordquip/cs360/notes/week02notes03.html.
+
+The resulting table contains all fields from table first table and all fields of the second table.
+
+The WHERE clause of the query then chooses records from the temporary table formed by the join in the FROM clause of the query.
+
+ 
+
+ 
+
+So, a major difference between the workings of a subquery and a join is a subquery does not form a temporary table, and a join does.  Forming a temporary table has the side-effect of allowing the SELECT clause of the query to list fields from both of the tables involved in the join (Employee.LastName and Sale.SaleDate in this join example), but the SELECT clause of a subquery may list only fields from the table in the FROM clause of the outer query.  The fields of the table in the FROM clause of the inner query are ‘lost’ to the SELECT clause of the outer query.  (The fields of SaleAnimal are not available to the SELECT clause of the outer query in the subquery example above.)

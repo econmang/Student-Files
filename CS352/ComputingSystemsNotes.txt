@@ -1,0 +1,304 @@
+The Elements of Computing Systems: Building a Modern Principle From First Principles
+
+Chapter 1: Boolean Logic:
+
+	Boolean Logic:
+
+		- Boolean algebra is a binary algebra, where there are two potential states ([0,1],[true,false],[on,off], etc.)
+
+		- Truth table representation gives you the value of each tuple v(sub1) to v(subn) and ends with a final column
+		  giving a representation of f(v(sub1)... v(subn) ):
+
+			ex.)
+				| x | y | x+y |
+				| 0 | 0 |  0  |
+				| 0 | 1 |  1  |
+				| 1 | 0 |  1  |
+				| 1 | 1 |  1  |
+
+		- Boolean Expressions are algebraic forms of boolean operations:
+
+			ex.)
+
+				f(x,y) = x + y
+
+				and = *
+				or  = +
+				not = ! (also a line over a variable name)
+
+
+		- The Canonical Expression is a way to use boolean expressions to represent a truth table using only the three aforesaid operators
+			* All values can be expressed using the three operators no matter how complex
+			* This is useful as it can be used to find out how to create a function capable of outputting what is needed in a simplified expression
+
+	Gate Logic:
+
+		- A gate is a device that implements a boolean function
+
+		- A basic premise is that a gate will take n variables and return m results.
+
+		- Although we may interface a gate using three pins, or the like, we must recognize that each gate will have a much more complex implementation of composite 
+		simple gates. This mean that a*b*c actually means (a*b)*c which can be expressed in HDL as And(And(a,b),c);
+
+	Hardware Description Language (HDL):
+
+		- HDL (also known as Virtual Hardware Description Language VHDL) is a way of describing and testing hardware implmenation by coding and designing chips through
+		  a service and testing it to optimize outcomes.
+
+	Hardware Simulation:
+
+		- HDL, being a virtual code representation, can be written and debugged very similarly to in software development.
+
+
+	NAND Gate:
+
+		- NAND(a,b) = !(a * b);
+
+		- Truth Table:
+
+			| a | b | !(a*b) |
+			| 0 | 0 |    1   |
+			| 0 | 1 |    1   |
+			| 1 | 0 |    1   |
+			| 1 | 1 |    0   |
+
+
+	Basic Logic Gates:
+
+		- Not gate:
+			* Not(a) = !a;
+			* Truth Table:
+
+				| a | out |
+				| 0 |  1  |
+				| 1 |  0  |
+
+		- And gate:
+			* And(a,b) = a * b
+			* Truth Table:
+			
+				| a | b | a*b |
+				| 0 | 0 |  0  |
+				| 0 | 1 |  0  |
+				| 1 | 0	|  0  |
+				| 1 | 1 |  1  |
+
+		- Or gate:
+			* Or(a,b) = a + b
+			* Truth Table:
+
+				| a | b | a+b |
+				| 0 | 0 |  0  |
+				| 0 | 1 |  1  |
+				| 1 | 0 |  1  |
+				| 1 | 1 |  1  |
+
+		- Xor gate:
+			* Xor(a,b) = And(a,!b) + And(!a,b)
+			* Truth Table:
+				| a | b | a*!b | !a*b | (a*!b)+(!a*b) |
+				| 0 | 0 |  0   |   0  |       0       |
+				| 0 | 1 |  0   |   1  |       1       |
+				| 1 | 0 |  1   |   0  |       1       |
+				| 1 | 1 |  0   |   0  |       0       |
+
+		- Multiplexor (Mux):
+			* Three input gate that uses on the inputs (selection bit) to 
+			  select and output one of the other two inputs (data bits).
+			* Mux(a,b,sel) = (a * !sel) + (b * sel)
+			* Truth Table:
+					| a | b | sel | (a*!sel) | (b*sel) | (a*!sel)+(b*sel) |
+					| 0 | 0 |  0  |    0     |    0    |         0        |
+					| 0 | 0 |  1  |    0     |    0    |         0        |
+					| 0 | 1 |  0  |    0     |    0    |         0	      |
+					| 0 | 1 |  1  |    0     |    1    |         1        |
+					| 1 | 0 |  0  |    1     |    0    |         1        |
+					| 1 | 0 |  1  |    0     |    0    |         0        |
+					| 1 | 1 |  0  |    1     |    0    |         1        |
+					| 1 | 1 |  1  |    0     |    1    |         1        |
+
+		- Demultiplexor (DMux):
+		    * If sel=0 then {a = in, b = 0} else {a = 0, b = in}
+		    * Truth Table:
+		            | in | sel | a  | b  |
+		            |  0 |  0  | in | 0  |
+		            |  1 |  0  | in | 0  |
+		            |  0 |  1  |  0 | in |
+		            |  1 |  1  |  0 | in |
+		    
+		    
+    Multi-Bit Versions of Basic Gates
+    
+        - Computer Hardware operates on Multi-bit arrays called buses
+        - 32 input buses and 32 output buses is how a 32 bit computer works.
+
+    Multi-Way Versions of Basic Gates
+    
+        - Way gates take multi inputs to gain a one out.
+        - Mux and DMux require enough in's to use the bits to select a specific output
+
+    Boolean Arithmetic
+    
+        - If the most significant bits in binary addition add up with a remaining 1 (i.e. 1+1) then the carry in this case is called overflow
+        - A binary system of n digits can generate 2^n bit patterns
+        - Signed binary: 
+            * Two's Complement (Radix Complement): Flip all the bits and then add 1
+                ex.) 2 = 00010 while -2 = 11110, when you add these together: 00010 + 11110, you get 00000, where 2 + -2 = 0.
+            * The binary representations of all negative numbers begin with a 1 and the representation of all even numbers begins with 0.
+            
+    Adders:
+    
+        Half-Adder: Adds two bits
+            * xor(a = a, b = b, out = sum);
+              and(a = a, b = b, out = carry);
+            * Truth Table:
+                | a | b | carry | sum |
+                | 0 | 0 |   0   |  0  |
+                | 0 | 1 |   0   |  1  |
+                | 1 | 0 |   0   |  1  |
+                | 1 | 1 |   1   |  0  |
+            
+            
+        Full-Adder: Adds three bits
+            * halfadder(a = a, b = b, sum = sumAB, carry = carryAB);
+              halfadder(a = sumAB, b = c, sum = sum, carry = carryABC);
+              or(a = carryAB, b = carryABC, out = carry);
+            * Truth Table:
+                | a | b | c | carry | sum |
+                | 0 | 0 | 0 |   0   |  0  |
+                | 0 | 0 | 1 |   0   |  1  |
+                | 0 | 1 | 0 |   0   |  1  |
+                | 0 | 1 | 1 |   1   |  0  |
+                | 1 | 0 | 0 |   0   |  1  |
+                | 1 | 0 | 1 |   1   |  0  |
+                | 1 | 1 | 0 |   1   |  0  |
+                | 1 | 1 | 1 |   1   |  1  |
+            
+        Adder: Adds n bits
+            Basically constructed of full adders
+            
+        ALU: Gains both negated and zeroed values and uses MUX to decide between them in order to gain the final output
+
+    Sequential Logic:
+        
+        Combinational Logic: Compute solely on the combinations of their input values (these cannot maintain a state)
+        
+        Sequential Logic: Able to save and recall values. Used to create memory.
+            * Basic gate implementation is a flip-flop
+        
+        Clock (clock signal): "tick" - low signal, "tock" - high signal. Time between beginning of tick and end of tock is a clock cycle.
+                            * In a real computer this is done with an oscillator.
+        
+        Flip Flops: Most elementary sequential circuit.
+            * We will use a data flip flop (DFF) whose interface consists of a one bit input and a one bit output.
+                - Additionally it also has a clock signal that continuously changes in accordance with the master clock signal.
+            * Both of these signal allow DFF to act on a time basis: out(t) = in(t-1) where out is output and in is input and t is the current clock cycle.
+            
+            * This fundamental chip can be used to create registers all the way up to arbitrarily large random access memory (RAM) units.
+      
+        Registers: A device that can "store" or "remember" a value. Implementing the basic out(t) = in(t-1) logic.
+            * A one bit register can be implemented with an in, a mux, a DFF feeding back into the mux, and an output.
+            * The mux acts as a load so as to load the old value and keep it running in a loop or to load in a new value
+            by selecting the input as the new value for the DFF
+            * A bit's state is acting as a single-bit register
+            * Multi-bits can be implemented to make a multi-bit register by storing and loading their states
+     
+        Memories:
+        
+            RAM: This is the stacking of many multi-bit registers on one another. Random Access means we can read/write to a memory in any location at
+            an equal rate for all registers in memory.
+                * This can be done by loading into many registers to give them values and using higher level Mux gates in order to decide which to access
+                
+            Counters: Sequential chips whose state is an integer number that increments every time unit
+                                
+                     
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    

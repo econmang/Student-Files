@@ -1,0 +1,400 @@
+Art of Assembly Programming Language:
+
+2.3 Anatomy of an HLA Program:
+
+	program prgmID;
+		Declarations
+	begin prgmID;
+		Statements
+	end prgmID;
+
+		EX.)
+			program helloWorld;
+			#include( “stdlib.hhf” );
+
+			begin helloWorld;
+ 				stdout.put( “Hello, World of Assembly Language”, nl );
+			end helloWorld;
+
+	HLA identifiers are case neutral
+		- case neutral: Registers whether you use lower or upper case
+			but you cannot name two identifiers where only case differs
+
+	HLA Print Statement:
+		- stdout.put("Hello, World.", nl);
+		- nl is a newline character for the print statement.
+
+	Signed Integer Types:
+		- int8: 8 bit signed integers
+		- int16: 16 bit signed integers
+		- int32: 32 bit signed integers
+
+2.4 Basic HLA Declarations:
+
+	Variable declaration:
+		normally happens in the static section:
+				- ex.)
+					static
+						i8:		int8	:= 8;
+						i16:	int16	:= 1600;
+						i32:	int32	:= -320000;
+						potato:	int8;
+
+	User Input:
+		- ex.)
+			stdout.put("Enter a value: ", nl);
+			stdin.get(potato);
+			stdout.put("You entered: ", potato, nl);
+
+2.5 Boolean Values:
+
+	- Boolean variables are byte values that can be manipulated with 8 bit registers
+	- example declaration:
+		static:
+			Boolvar:	boolean;
+			trueVar:	boolean := true;
+			falVar:		boolean := false;
+
+	- stdin.get() does not work for boolean values
+
+2.6 Character Values:
+
+	- characters are literals placed within a set of single parantheses
+		static:
+			c:			char;
+			letterA:	char := 'A';
+
+2.7 An Intro to Intel 80x86 CPU Family:
+
+	- Intel CPU's are generally Von Neumann Architecture Machines:
+		- These systems contain three building blocks:
+			1.) CPU
+			2.) Memory
+			3.) I/O Devices
+
+	CPU:
+		 Can be broken down into four registers:
+		 	- general purpose registers
+		 	- special purpose application accessible registers
+		 	- segment registers
+		 	- special purpose kernel mode registers
+
+		 	CPU is broken up in registers of differing size:
+		 		- 32 bit registers:
+		 			EAX, EBX, ECX, EDX, ESI, EDI, EBP, and ESP
+		 			where the E means extended
+		 		- 16 bit registers:
+		 			AX, BX, CX, DX, SI, DI, BP, SP
+		 		- 8 bit registers:
+		 			AL, AH, BL, BH, CL, CH, DL, DH
+
+		 			- Remember to consider overlap of the registers
+
+		 	EFLAGS Register: A 32 bit register that encapsulates several boolean values
+		 					 Eight of these bits (or flags) are of interest to application
+							 programmers writing assembly language programs. These are the
+							 overflow, direction, interrupt disable,
+							 sign, zero, auxiliary carry, parity, and carry flags.
+							 The following diagram shows their layout within the lower
+							 16-bits of the EFLAGS register
+
+							Of the 8 usable flags, four are important called condition codes:
+									Condition Codes:
+										- Overflow
+										- Carry
+										- Sign
+										- Zero
+
+			EIP Register: Contains memory address of the next machine instruction to manipulate
+
+			Overall, Registers are middleman parts of the program used in almost every calculation
+
+2.8 Basic Machine Instructions
+	mov:
+		 - mov(source_operand, distination_operand);
+		 - What it does: destination_operand = source_operand
+		 - operands must be the same size
+
+	add:
+		 - add( source_operand, destination_operand );
+		 - What it does: destination_operand = destination_operand + source_operand ;
+		 - operands must be same size
+
+	sub:
+		 - sub( source_operand, destination_operand );
+		 - What it does: destination_operand = destination_operand - source_operand ;
+		 - operands must be same size
+
+2.9 HLA Control Structures:
+	IF..THEN..ELSEIF..ELSE..ENDIF, WHILE..ENDWHILE, REPEAT..UNTIL,
+
+	2.9.1 Boolean Expressions in HLA Statements
+		- Flag Specification Boolean Values:
+			@c carry: True if the carry is set (1), false if the carry is clear (0).
+			@nc no carry: True if the carry is clear (0), false if the carry is set (1).
+			@z zero: True if the zero flag is set, false if it is clear.
+			@nz not zero: True if the zero flag is clear, false if it is set.
+			@o overflow: True if the overflow flag is set, false if it is clear.
+			@no no overflow: True if the overflow flag is clear, false if it is set.
+			@s sign: True if the sign flag is set, false if it is clear.
+			@ns no sign: True if the sign flag is clear, false if it is set.
+
+		- Other boolean operators are available as well. Think C for how to do it and python when thinking of for loops
+
+	2.9.2 The HLA IF..THEN..ELSEIF..ELSE..ENDIF Statment
+
+		if( expression ) then
+			sequence of one or more statements
+	elseif( expression ) then
+			sequence of one or more statements
+	else
+			sequence of one or more statements
+	endif;
+
+	2.9.3 The WHILE..ENDWHILE Statment
+
+		while( expression ) do
+			sequence of one or more statements
+		endwhile;
+
+	2.9.4 The FOR..ENDFOR Statement
+
+		for( Initial_Stmt; Termination_Expression; Post_Body_Statement ) do
+							<< Loop Body >>
+		endfor;
+
+		ex.)
+			for( mov( 0, i ); i < 10; add(1, i )) do
+				stdout.put( “i=”, i, nl );
+			endfor;
+
+	2.9.5 The REPEAT..UNTIL Statement
+
+		repeat
+			sequence of one or more statements
+		until( expression );
+
+		ex.) 
+		mov( 10, ecx );
+		repeat
+			stdout.put( “ecx = “, ecx, nl );
+			sub( 1, ecx );
+		until( ecx = 0 );
+
+	2.9.6 The BREAK and BREAKIF Statements
+	
+		- break;
+		- breakif( expression );
+
+	2.9.7 The FOREVER..ENDFOR Statement
+
+		forever
+			sequence of one or more statements
+		endfor;
+
+		ex.)
+		forever
+			stdout.put( “Enter an integer less than 10: “);
+			stdin.get( i );
+			breakif( i < 10 );
+			stdout.put( “The value needs to be less than 10!”, nl );
+		endfor;
+
+	2.9.8 The Try..Exception..EndTry
+
+		try
+			sequence of one or more statements
+		exception( exceptionID )
+			sequence of one or more statements
+		exception( exceptionID )
+			sequence of one or more statements
+		endtry;
+
+		ex.)
+		repeat
+			mov( false, GoodInteger ); // Note: GoodInteger must be a boolean var.
+			try
+				stdout.put( “Enter an integer: “ );
+				stdin.get( i );
+				mov( true, GoodInteger );
+			exception( ex.ConversionError );
+				stdout.put( “Illegal numeric value, please re-enter”, nl );
+			exception( ex.ValueOutOfRange );
+				stdout.put( “Value is out of range, please re-enter”, nl );
+			endtry;
+		until( GoodInteger );
+
+2.10 HLA Library
+
+	2.10.3 The stdout.newln Routine
+
+		The stdout.newln procedure prints a newline sequence to the standard output device. This is functionally
+		equivalent to saying “stdout.put( nl );” 
+
+	2.10.4 The putiX Routine
+
+		- Forms:
+			puti8();
+			puti16();
+			puti32();
+
+			Prints whatever is inputed as either a byte, two bytes, or three bytes. It signs the value
+
+	2.10.5 The stdout.putiXSize Routines
+
+		- The stdout.puti8Size, stdout.puti16Size, and stdout.puti32Size routines output signed integer values to
+		  the standard output, just like the stdout.putiX routines. These routines, however, provide more control over
+		  the output; they let you specify the (minimum) number of print positions the value will require on output.
+		  These routines also let you specify a padding character should the print field be larger than the minimum
+		  needed to display the value. These routines require the following parameters:
+		  stdout.puti8Size( Value8, width, padchar );
+		  stdout.puti16Size( Value16,width, padchar );
+		  stdout.puti32Size( Value32, width, padchar );
+
+	2.10.6 The stdout.put routine
+
+		- Flexible print statement capable of print a set of values
+
+	2.10.7 The stdin.getc Routine
+
+		- Get's next available char in input buffer and stores it in AL register.
+		- Used in conjunction with readLn():
+												stdout.put("Enter a 'y' or 'n'.);
+												stdin.readLn();
+ 												stdin.getc();
+ 												breakif(al = 'y');
+ 												breakif(al = 'n');
+
+ 	2.10.8 The stdin.getiX Routines
+
+ 		stdin.geti8()
+ 		stdin.geti16()
+ 		stdin.geti32()
+
+ 		- Store their values in al, ax, and eax respectively. This gains signed integer values
+
+ 	2.10.9 The stdin.readLn and stdin.flushInput Routines
+
+ 		- stdin.readLn() discards input buffer and has user enter new values there, stopping any confusion from previous input data
+ 			- normally called before standard input routine
+ 		- stdin.flushInput() simply discards any information in the buffer and is easily used
+ 			- preferred use and is normally called after a standard input routine is used
+
+ 	2.10.10 stdin.get Macro
+
+ 		- Let’s rewrite the example given in the previous section:
+
+			stdout.put( “Enter two integer values: “ );
+			stdin.geti32();
+			mov( eax, intval );
+			stdin.geti32();
+			mov( eax, AnotherIntVal );
+
+		- Using the stdin.get macro, we could rewrite this code as:
+
+			stdout.put( “Enter two integer values: “ );
+			stdin.get( intval, AnotherIntVal );
+
+
+Chapter 3 Data Representation:
+
+	
+	3.3.1 Bits
+
+		- Bits:
+				1 or 0
+
+	3.3.2 Nibbles
+
+		- Nibbles are half-bytes (sets of four bits)
+		- One nibble is capable of representing one hex value
+
+	3.3.3 Bytes
+
+		- 8 bit values
+		- numbered 0 to 7
+		- 0 lowest order or least significant bit
+		- 7 highest order or most significant bit
+
+		- bits 0 to 3 are low order nibble
+		- bits 4 to 7 are high order nibble
+
+		- They can represent 2^8 values (256)
+
+	Quick notes:
+
+		Word: 16 bits
+		Double Word: 32 bits
+		- use % symbol in front of a number to specify that it is binary
+		- use $ symbol in front of a number to specify that it is hexadecimal
+
+		-By default, HLA displays all byte, word, and dword variables using the hexadecimal numbering system
+		 when you use the stdout.put routine. Likewise, HLA’s stdout.put routine will display all register values in
+		 hex.
+
+		- Logical operators:
+
+			and( source, dest );
+			or( source, dest );
+			xor( source, dest );
+			not( dest );
+
+		- highest order bit is the sign bit 1 = negative, 0 = positive
+
+		Two's complement conversion between positive and negative:
+			flip all bits and add 1 to the result
+
+		- Sign extension and contraction are done to convert 8 bit values to 16 bits and vice versa
+
+			cbw(); // Converts the byte in AL to a word in AX via sign extension.
+			cwd(); // Converts the word in AX to a double word in DX:AX
+			cdq(); // Converts the double word in EAX to the quad word in EDX:EAX
+			cwde(); // Converts the word in AX to a doubleword in EAX.
+
+			movsx( source, dest ); //sign extend
+			movzx( source, dest ); //zero extend
+
+		shl(1, 100101001) //roughly equivalent of multiplying by two
+		shr(1, 110010110) //roughly equivalent to dividing by two
+		sar( count, dest ); //signed shift right
+		sal( count, dest ); //signed shift left
+
+		rol(count, dest); // rotate left and sends any carries to the end of the binary number
+		ror(count, dest); // rotate right and sends any carries to the front of the binary number
+
+		rcl
+		rcr  // these are similar to the rotate but for multishifts so as to keep control of carry flag
+
+		cld(); Clears (sets to zero) the direction flag.
+		std(); Sets (to one) the direction flag.
+		cli(); Clears the interrupt disable flag.
+		sti(); Sets the interrupt disable flag.
+		clc(); Clears the carry flag.
+		stc(); Sets the carry flag.
+		cmc(); Complements (inverts) the carry flag.
+		sahf(); Stores the AH register into the L.O. eight bits of the FLAGs register.
+		lahf(); Loads AH from the L.O. eight bits of the FLAGs register.
+
+
+
+	mov( [eax], al );
+	mov( [ebx], al );
+	mov( [ecx], al );
+	mov( [edx], al );
+	mov( [edi], al );
+	mov( [esi], al );
+	mov( [ebp], al );
+	mov( [esp], al );
+		- These eight addressing modes reference the memory location at the offset found in the register enclosed by
+		  brackets (EAX, EBX, ECX, EDX, EDI, ESI, EBP, or ESP, respectively).  
+
+	ex.)
+		mov( $1234_5678, ebx );
+		mov( [ebx], al ); // Attempts to access location $1234_5678.
+
+	ex.)
+
+		mov( &J, ebx ); // Load address of J into EBX.
+		mov( eax, [ebx] ); // Store EAX into J.
+
+	

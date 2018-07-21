@@ -1,0 +1,65 @@
+package lab1;
+
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+
+public class Complex
+{  
+	private double real, imaginary;
+
+   public Complex() /*********Still needs work*************/
+   {
+	   double real = this.real;
+	   double imaginary = this.imaginary;
+   }
+   public Complex(double real, double imaginary) /*********Still needs work*************/
+   {
+	    this.real = real;
+	    this.imaginary = imaginary;
+   }
+   public String toString() /*********Still needs work*************/
+   {
+	   String str;
+	   String sign;
+	   if (imaginary < 0)
+		   sign = "-";
+	   else if(imaginary > 0)
+		   sign = "+";
+	   else
+		   sign = null;
+	   str = (real + " "+ sign + " "+ imaginary);
+	   return str;
+   }
+   public Complex add( Complex c)
+   {  return new Complex
+           (real+c.real, imaginary+c.imaginary);
+   }
+   public Complex minus(Complex c)
+   {
+	   return new Complex(real-c.real, imaginary-c.imaginary);
+   }
+   public Complex product(Complex c)
+   {
+	   return new Complex(real*c.real, imaginary*c.imaginary);
+   }
+   public Complex div(Complex c) /*********Still needs work*************/
+   {
+	   Complex recipC = new Complex(); //reciprocal c (after multiplying by the denominator reciprocal)
+	   return recipC;
+   }
+   public static Complex parseComplex(String str) /*********Still needs work*************/
+                    throws NumberFormatException,NoSuchElementException
+   {
+	   StringTokenizer stk = new StringTokenizer(str, "i ");
+	   Double real = Double.parseDouble(stk.nextToken());
+	   if (stk.nextToken() instanceof String)
+	   {
+		   String sign = stk.nextToken();
+	   }
+	   Double imaginary = Double.parseDouble(stk.nextToken());
+	   if (sign.equals("-"))
+	    	   imaginary = imaginary*-1;
+	   Complex c = new Complex(real, imaginary);
+	   return c;
+   }
+}

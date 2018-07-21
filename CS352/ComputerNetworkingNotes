@@ -1,0 +1,155 @@
+Computer Networking: A Top Down Approach
+
+    Chapter 1: Computer Networks and the Internet
+    
+        1.1 What is the Internet
+                
+            1.1.1 Nuts and Bolts Description
+            
+                - Hosts (End Systems): Devices connected to the internet
+                (whether they be computers, mobile phones, security systems, etc.)
+                    * End Systems are connected together by *communication links* and *packet switches*
+                - Different links and mediums can transmit at different rates called *transmission rates*
+                    * Transmission rate measured in bits/second
+                - Packets: Sent data is split into these segments with header bytes on each package
+                - Packet Switch: Takes a packet arriving from one of its communication links and forwards
+                it to the next of its communication links.
+                    * Most common packet switches are *routers* and *link-layer switches*
+                    * link-layers are generally used in access networks while routers are used at network cores
+                - The sequence of communication links and packet switches a packet takes from a sending end system
+                to a recieiving end system is known as the route or path.
+                - Protocols: Rules that controls sending and recieving information between communication links
+                    * Common Protocols:
+                        @ TCP (Transmission Control Protocol) and IP (Internet Protocol)
+                        @ Often cited together as TCP/IP
+                        @ HTTP for web
+                        @ SMTP for e-mail
+                    * Internet Standards are made by the Internet Engineering Task Force (IETF) to set rules
+                    for the general use of the internet
+                        @ RFC's (Request for Comments) are used to initially request for comments to find solutions to
+                        problems with TCP/IP network design and protcols. This documentation makes up the Internet Standards
+
+            1.1.2 A Services Description
+            
+                - The internet can be viewed as an infrastructure that provides services to applications
+                - Applications that require connection through the internet to other end systems are called
+                distributed applications
+                - End systems attached to the internet provide an Application Programming Interface (API)
+                    * API: Rules that specify how a programming on one end system asks the Internet 
+                    infrastructure to deliver data to specific destination end systems and how the
+                    program will run when it gets there.
+
+            1.1.3 What Is a Protocol?
+            
+                - Specific messages are sent in order to gain the completion of different actions in response
+                    * in order for this transmission to work, both have to operating with the same
+                    protocols in mind or this interaction is pointless
+                - Protocol: Defines the format and the order of messages exchanged between two or more
+                communicating entities, as well as the actions taken on the transmission and/or receipt
+                of a message or other event.
+                
+        1.2 The Network Edge
+           
+                - Hosts and End Systems may be further sub-divided into two categories:
+                    * clients: user systems that generally request and consume
+                    media/resources on the internet
+                    * servers: Nowadays they generally reside in large *data centers*
+                    and they house information and resources the clients can request
+                    on the internet.
+            
+                
+            1.2.1 Access Networks
+                
+                - The two most common broadband types in homes are digital subscriber line (DSL)
+                and cable.
+                - DSL: a telco provides local phone access. So, the telco is also the ISP.
+                A DSL modem uses the telephone (twisted-pair copper wire) to exchange data
+                with the digital subscriber line access multiplexer (DSLAM) located in the
+                telco's CO (central office). Slower propogation rate because of the medium
+                and shared resource.
+                    * Different rates for internet access will be had due to tiering of
+                    rates for different prices.
+                    * Additionally, distance between the CO will limit the rate.
+                        @ Anyone beyond 5-10 miles should consider another method
+                        of accessing the internet.
+                - Cable: uses existing television cable networks to transer
+                internet data.
+                    * Fiber optics are used to get to neighborhood-level junctions
+                    where coaxial cables take over
+                    * Can support much more people than DSL
+                    * Because of fiber and coaxial use, it is sometimes referred to
+                    as Hybrid Fiber Coax (HFC).
+                    * Cable internet access requires special modems called cable modems
+                    * Cable Modem Termination System (CMTS): simlar to DSL's DSLAM
+                - FTTH (Fiber to the Home): New method of fiber networks being developed
+                promising faster propogation rates.
+                - Ethernet has an average transmission rate of 100Mbps
+                
+            1.2.2 Physical Media
+            
+                - For each transmitter-reciever pair, there is a physical medium that propogates the signal (bit/electromagnetic wave)
+                    * guided media: signals propogate through a physical medium (cable)
+                    * unguided media: propogates freely (raido signals)
+                    
+                - Guided Media:
+                    * Unshielded Twin Pair (UTP) Copper Wire
+                    * Coaxial Cables (shared medium between computers)
+                    * Fiber optics (light signals as bits of information in packet. Speed of light)
+                    
+        1.3 The Network Core
+        
+            1.3.1 Packet Switching
+            
+                - Transmission Rate: L/R
+                    * Length of bits over the rate of transmission of the meidum
+                    
+                - delay(end-to-end) = N * (L/R) where N is the number of links to travel through
+                    * store-and-forward: Packets are only sent forward after the whole packet reaches the communication link
+               
+                - Output buffer: There is a queue of stored packets waiting to be stored and forwarded. With bottlenecking at these areas, this can also cause queueing delay
+                    * Queueing delay can exceed the capacity of a buffer and cause packet loss.
+                
+            1.3.2 Circuit Switching
+            
+                - 
+               
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                

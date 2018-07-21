@@ -1,4 +1,4 @@
-EXEC = lab6
+EXEC = lab8
 SRCS = ${EXEC}.c glfuncs.c shader.c matrix.c
 OBJS = ${EXEC}.o glfuncs.o shader.o matrix.o
 INCDIRS = 

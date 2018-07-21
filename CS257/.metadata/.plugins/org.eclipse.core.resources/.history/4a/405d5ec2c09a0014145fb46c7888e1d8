@@ -1,0 +1,27 @@
+package game;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Polygon;
+
+public class Avatar
+{
+	private int x, y;
+	private Polygon head, torso, leftFoot, rightFoot, leftHand, rightHand;
+	
+	public Avatar(int x, int y)
+	{
+		final int[] HEAD = {};
+		final int[] TORSO = {x, y, };
+		final int[] LEFTFOOT = {};
+		final int[] RIGHTFOOT = {};
+		final int[] LEFTHAND = {};
+		final int[] RIGHTHAND = {};
+		
+	}
+	
+	public void draw(Graphics g)
+	{
+		
+	}
+}
